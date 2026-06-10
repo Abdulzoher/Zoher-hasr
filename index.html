@@ -29,11 +29,8 @@
             body { background: white; color: black; padding: 0; }
             .no-print { display: none !important; }
             .print-page { display: block !important; width: 100%; page-break-after: always; }
-            /* منع قص الصفوف أثناء الطباعة */
             tr { page-break-inside: avoid; }
-            /* تنسيق عرض الصور في التقرير */
             .print-img { max-width: 70px !important; max-height: 70px !important; object-fit: cover; border: 1px solid #ccc; border-radius: 6px; display: inline-block; margin: 2px; }
-            /* تنسيق نقاط الفحص المعتمدة */
             .check-list-print { font-size: 10px; color: #15803d; margin-top: 5px; font-weight: 600; }
         }
     </style>
@@ -62,7 +59,7 @@
             <div class="w-full lg:w-auto">
                 <div class="flex flex-col sm:flex-row sm:items-center gap-3">
                     <span class="bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black px-4 py-1.5 rounded-xl text-xs md:text-sm tracking-wider shadow-lg shadow-amber-500/20 text-center sm:text-right">AZ Developments</span>
-                    <h1 class="text-md font-bold text-white text-center sm:text-right">م/ عبدالرحمن محمد زهير - المهندس المسؤول</h1>
+                    <h1 class="text-md font-bold text-white text-center sm:text-right">Eng. Abdelrahman Mohamed Zoher - Site Manager</h1>
                     <span id="networkStatusBadge" class="inline-flex items-center gap-1 bg-emerald-950 text-emerald-400 border border-emerald-800 rounded-lg px-2 py-0.5 text-[10px] font-bold justify-center">
                         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> متصل بالشبكة
                     </span>
@@ -88,75 +85,46 @@
             <section id="ar-hud-suite" class="hidden relative w-full h-[500px] bg-black rounded-3xl overflow-hidden border-2 border-indigo-500/50 shadow-2xl shadow-indigo-900/20">
                 <div class="absolute inset-0 z-0 bg-slate-900 flex items-center justify-center text-slate-500 text-sm">جاري فتح الكاميرا الميدانية...</div>
                 <video id="arVideoElement" class="absolute inset-0 w-full h-full object-cover z-10" autoplay playsinline></video>
-                
                 <div class="absolute inset-0 z-20 pointer-events-none p-4 flex flex-col justify-between">
                     <div class="flex justify-between items-start">
-                        <div class="bg-black/50 backdrop-blur text-indigo-400 font-mono text-[10px] p-2 rounded border border-indigo-500/30">
-                            ENG. ZOHEIR AR SYSTEM<br>STATUS: SCANNING...<br>GPS: ONLINE
-                        </div>
-                        <div class="bg-black/50 backdrop-blur text-amber-400 font-mono text-[10px] p-2 rounded border border-amber-500/30">
-                            TARGET: REINFORCEMENT<br>CHECK: Ld & SPACING
-                        </div>
+                        <div class="bg-black/50 backdrop-blur text-indigo-400 font-mono text-[10px] p-2 rounded border border-indigo-500/30">ENG. ZOHEIR AR SYSTEM<br>STATUS: SCANNING...<br>GPS: ONLINE</div>
+                        <div class="bg-black/50 backdrop-blur text-amber-400 font-mono text-[10px] p-2 rounded border border-amber-500/30">TARGET: REINFORCEMENT<br>CHECK: Ld & SPACING</div>
                     </div>
-                    
                     <div class="relative w-64 h-64 mx-auto border-2 border-indigo-400/50">
-                        <div class="absolute -top-2 -left-2 w-6 h-6 border-t-4 border-l-4 border-indigo-400"></div>
-                        <div class="absolute -top-2 -right-2 w-6 h-6 border-t-4 border-r-4 border-indigo-400"></div>
-                        <div class="absolute -bottom-2 -left-2 w-6 h-6 border-b-4 border-l-4 border-indigo-400"></div>
-                        <div class="absolute -bottom-2 -right-2 w-6 h-6 border-b-4 border-r-4 border-indigo-400"></div>
-                        <div class="scanline"></div>
-                        <div class="absolute inset-0 flex items-center justify-center"><span class="text-indigo-400/70 text-4xl">+</span></div>
+                        <div class="absolute -top-2 -left-2 w-6 h-6 border-t-4 border-l-4 border-indigo-400"></div><div class="absolute -top-2 -right-2 w-6 h-6 border-t-4 border-r-4 border-indigo-400"></div><div class="absolute -bottom-2 -left-2 w-6 h-6 border-b-4 border-l-4 border-indigo-400"></div><div class="absolute -bottom-2 -right-2 w-6 h-6 border-b-4 border-r-4 border-indigo-400"></div><div class="scanline"></div><div class="absolute inset-0 flex items-center justify-center"><span class="text-indigo-400/70 text-4xl">+</span></div>
                     </div>
-
-                    <div class="text-center text-white font-bold text-xs bg-black/60 p-2 rounded-xl mx-auto backdrop-blur border border-slate-700">
-                        وجه الكاميرا نحو تفصيلة الحديد أو اللوحة لمعاينة الأبعاد
-                    </div>
+                    <div class="text-center text-white font-bold text-xs bg-black/60 p-2 rounded-xl mx-auto backdrop-blur border border-slate-700">وجه الكاميرا نحو تفصيلة الحديد أو اللوحة لمعاينة الأبعاد</div>
                 </div>
-
                 <button onclick="stopARCamera()" class="absolute bottom-4 left-4 z-30 bg-red-600 hover:bg-red-500 text-white p-2 rounded-xl text-xs font-bold shadow-lg border border-red-400 transition-all cursor-pointer pointer-events-auto">إغلاق المعاينة ✖</button>
             </section>
 
             <section id="quick-calcs-suite" class="hidden bg-slate-900/80 p-6 rounded-3xl shadow-2xl border border-blue-900/40 space-y-4">
                 <div class="border-b border-slate-800 pb-2">
                     <h2 class="text-md font-black text-blue-400 flex items-center gap-2">🧮 حاسبة الميدان السريعة (Ld والتفاصيل)</h2>
-                    <p class="text-[11px] text-slate-400 mt-1">حسابات فورية لأطوال التماسك وأوزان الحديد وأنت واقف وسط الموقع.</p>
                 </div>
-                
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
                     <div class="premium-card p-4 rounded-2xl space-y-3">
                         <h3 class="text-xs font-bold text-indigo-400 border-b border-slate-800/60 pb-1.5">🔗 طول رباط التماسك (Ld)</h3>
-                        <div>
-                            <label class="block text-[10px] text-slate-400 mb-1">قطر السيخ (مم):</label>
-                            <input type="number" id="ldDia" value="16" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white">
-                        </div>
+                        <div><label class="block text-[10px] text-slate-400 mb-1">قطر السيخ (مم):</label><input type="number" id="ldDia" value="16" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
                         <button onclick="calcLd()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 rounded-xl text-[10px] cursor-pointer">احسب أطوال الركوب</button>
                         <div id="ldResult" class="text-[10px] font-semibold mt-2 space-y-1 bg-slate-950/40 p-2 rounded-lg text-slate-300"></div>
                     </div>
-
                     <div class="premium-card p-4 rounded-2xl space-y-3">
                         <h3 class="text-xs font-bold text-amber-500 border-b border-slate-800/60 pb-1.5">⚖️ وزن وحصر أسياخ</h3>
-                        <div>
-                            <label class="block text-[10px] text-slate-400 mb-1">قطر السيخ (مم):</label>
-                            <input type="number" id="weightDia" value="12" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white">
-                        </div>
+                        <div><label class="block text-[10px] text-slate-400 mb-1">قطر السيخ (مم):</label><input type="number" id="weightDia" value="12" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
                         <button onclick="calcQuickWeight()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 rounded-xl text-[10px] cursor-pointer">احسب الوزن والعدد</button>
                         <div id="quickWeightResult" class="text-[10px] font-semibold mt-2 space-y-1 bg-slate-950/40 p-2 rounded-lg text-slate-300"></div>
                     </div>
-
                     <div class="premium-card p-4 rounded-2xl space-y-3">
                         <h3 class="text-xs font-bold text-emerald-400 border-b border-slate-800/60 pb-1.5">📏 مقاس قص الكانة</h3>
                         <div class="grid grid-cols-2 gap-1">
                             <div><label class="block text-[9px] text-slate-400 mb-0.5">طول العمود(سم)</label><input type="number" id="colL" value="60" class="w-full bg-slate-950/60 border border-slate-800 p-1 rounded-lg text-xs text-white"></div>
                             <div><label class="block text-[9px] text-slate-400 mb-0.5">عرض العمود(سم)</label><input type="number" id="colW" value="30" class="w-full bg-slate-950/60 border border-slate-800 p-1 rounded-lg text-xs text-white"></div>
                         </div>
-                        <div>
-                            <label class="block text-[9px] text-slate-400 mb-0.5">كفر خرساني (سم):</label>
-                            <input type="number" id="colCover" value="2.5" class="w-full bg-slate-950/60 border border-slate-800 p-1 rounded-lg text-xs text-white">
-                        </div>
+                        <div><label class="block text-[9px] text-slate-400 mb-0.5">كفر خرساني (سم):</label><input type="number" id="colCover" value="2.5" class="w-full bg-slate-950/60 border border-slate-800 p-1 rounded-lg text-xs text-white"></div>
                         <button onclick="calcStirrup()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded-xl text-[10px] cursor-pointer">طول سيخ الكانة</button>
                         <div id="stirrupResult" class="text-[10px] font-semibold mt-2 bg-slate-950/40 p-2 rounded-lg text-emerald-300"></div>
                     </div>
-
                     <div class="premium-card p-4 rounded-2xl space-y-3">
                         <h3 class="text-xs font-bold text-purple-400 border-b border-slate-800/60 pb-1.5">🛢️ تكعيب الأعمدة الدائرية</h3>
                         <div class="grid grid-cols-2 gap-1">
@@ -204,7 +172,6 @@
                     <button onclick="printCalculationReport()" class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-slate-950 font-black px-4 py-2 rounded-xl text-xs shadow-lg transition-all cursor-pointer">🖨️ طباعة تقرير الحصر</button>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
-                    
                     <div class="premium-card p-4 rounded-2xl space-y-2.5">
                         <h3 class="text-xs font-bold text-blue-400 border-b border-slate-800/60 pb-1.5">🏗️ 1. خرسانات وهادر الصب</h3>
                         <div class="grid grid-cols-3 gap-1">
@@ -217,7 +184,6 @@
                         <button onclick="calcConcreteSuite()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded-xl text-xs cursor-pointer">احسب الخرسانة</button>
                         <div id="concResult" class="text-[11px] font-semibold text-emerald-400 mt-2 space-y-1 bg-slate-950/40 p-2 rounded-lg"></div>
                     </div>
-                    
                     <div class="premium-card p-4 rounded-2xl space-y-2.5">
                         <h3 class="text-xs font-bold text-slate-300 border-b border-slate-800/60 pb-1.5">⛓️ 2. حديد التسليح والقصيات</h3>
                         <div class="grid grid-cols-2 gap-1">
@@ -225,16 +191,13 @@
                             <div><label class="block text-[10px] text-slate-400 mb-0.5">الأطوال (م)</label><input type="number" id="ironL" value="12" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
                         </div>
                         <div><label class="block text-[10px] text-slate-400 font-bold mb-1">📉 الهادر (%) :</label><input type="number" id="ironWaste" value="5" class="w-full bg-slate-950/60 border border-slate-800 p-2 rounded-lg text-xs text-amber-400 font-bold"></div>
-                        
                         <div class="grid grid-cols-2 gap-1 mt-2 border-t border-slate-800/60 pt-2">
                             <div><label class="block text-[9px] text-slate-400 mb-0.5">طول العمود(سم)</label><input type="number" id="ironColL" value="60" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
                             <div><label class="block text-[9px] text-slate-400 mb-0.5">عرض العمود(سم)</label><input type="number" id="ironColW" value="30" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
                         </div>
-
                         <button onclick="calcIronSuite()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 rounded-xl text-xs cursor-pointer mt-1">احسب الحديد والكانات</button>
                         <div id="ironResult" class="text-[11px] font-semibold text-emerald-400 mt-2 space-y-1 bg-slate-950/40 p-2 rounded-lg"></div>
                     </div>
-                    
                     <div class="premium-card p-4 rounded-2xl space-y-2.5">
                         <h3 class="text-xs font-bold text-amber-500 border-b border-slate-800/60 pb-1.5">🧱 3. المباني وخصم الفتحات</h3>
                         <div class="grid grid-cols-2 gap-1">
@@ -249,7 +212,6 @@
                         <button onclick="calcBricksSuite()" class="w-full bg-amber-500 text-slate-950 font-black py-2 rounded-xl text-xs cursor-pointer">احسب الطوب</button>
                         <div id="brickResult" class="text-[11px] font-semibold text-emerald-400 mt-2 space-y-1 bg-slate-950/40 p-2 rounded-lg"></div>
                     </div>
-                    
                     <div class="premium-card p-4 rounded-2xl space-y-2">
                         <h3 class="text-xs font-bold text-purple-400 border-b border-slate-800/60 pb-1.5">🎨 4. حاسبة التشطيبات</h3>
                         <div><label class="block text-[10px] text-slate-400 mb-0.5">المساحة الإجمالية (م²)</label><input type="number" id="finishArea" value="120" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
@@ -293,33 +255,18 @@
             <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 max-w-md w-full shadow-2xl overflow-y-auto max-h-[90vh]">
                 <h3 class="text-md font-bold mb-4 text-white">تفعيل بند وتوثيق ميداني</h3>
                 <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">اختر البند الهندسي المعتمد</label>
-                        <select id="itemPresetKey" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white"></select>
-                    </div>
+                    <div><label class="block text-xs font-bold text-slate-400 mb-1">اختر البند الهندسي المعتمد</label><select id="itemPresetKey" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white"></select></div>
                     <div>
                         <label class="block text-xs font-bold text-slate-400 mb-1 flex justify-between items-center">
-                            <span>📍 الموقع / الزون بالتفصيل</span>
-                            <button type="button" onclick="startVoiceInput('itemLocation')" class="text-indigo-400 text-lg">🎤</button>
+                            <span>📍 الموقع / الزون بالتفصيل</span><button type="button" onclick="startVoiceInput('itemLocation')" class="text-indigo-400 text-lg">🎤</button>
                         </label>
                         <input type="text" id="itemLocation" placeholder="مثال: الدور الأرضي - زون A" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white">
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-amber-400 mb-1">📅 تاريخ الاستلام الفعلي</label>
-                        <input type="date" id="itemDate" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white font-bold cursor-pointer">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">الترتيب والأولوية</label>
-                        <select id="itemPriority" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white">
-                            <option value="high">🚨 أولوية قصوى (مسار حرج)</option>
-                            <option value="medium">⚡ أولوية متوسطة</option>
-                            <option value="low">☕ أولوية عادية</option>
-                        </select>
-                    </div>
+                    <div><label class="block text-xs font-bold text-amber-400 mb-1">📅 تاريخ الاستلام الفعلي</label><input type="date" id="itemDate" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white font-bold cursor-pointer"></div>
+                    <div><label class="block text-xs font-bold text-slate-400 mb-1">الترتيب والأولوية</label><select id="itemPriority" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white"><option value="high">🚨 أولوية قصوى (مسار حرج)</option><option value="medium">⚡ أولوية متوسطة</option><option value="low">☕ أولوية عادية</option></select></div>
                     <div>
                         <label class="block text-xs font-bold text-slate-400 mb-1 flex justify-between items-center">
-                            <span>📝 ملاحظات وحالات عدم مطابقة</span>
-                            <button type="button" onclick="startVoiceInput('itemNotes')" class="text-amber-500 text-lg">🎤</button>
+                            <span>📝 ملاحظات وحالات عدم مطابقة</span><button type="button" onclick="startVoiceInput('itemNotes')" class="text-amber-500 text-lg">🎤</button>
                         </label>
                         <textarea id="itemNotes" placeholder="اكتب أو سجل ملاحظاتك هنا..." class="w-full bg-slate-950 border border-slate-800 p-2 rounded-xl text-xs text-white h-16"></textarea>
                     </div>
@@ -347,7 +294,7 @@
         </div>
 
         <footer class="text-center py-8 text-slate-700 text-xs mt-12 border-t border-slate-900">
-            <p class="font-semibold tracking-wider text-slate-400">AZ Developments | م/ عبدالرحمن محمد زهير © 2026</p>
+            <p class="font-semibold tracking-wider text-slate-400">AZ Developments | Eng. Abdelrahman Mohamed Zoher © 2026</p>
         </footer>
     </div>
 
@@ -379,7 +326,7 @@
     <div id="print-calc-zone" class="hidden print-page text-black p-6 bg-white" dir="rtl">
         <div class="text-center border-b-2 border-black pb-4 mb-6">
             <h1 class="text-2xl font-bold">تقرير حصر المواد والكميات الهندسي</h1>
-            <p class="text-md font-semibold mt-1">م/ عبدالرحمن محمد زهير (AZ)</p>
+            <p class="text-md font-semibold mt-1">Eng. Abdelrahman Mohamed Zoher (AZ)</p>
         </div>
         <table class="w-full border-collapse border border-black text-xs">
             <thead>
@@ -396,7 +343,6 @@
     </div>
 
     <script>
-        // إعداد المتغيرات الشاملة (Global Scope)
         window.presetItemsBank = {
             "str_1": { title: "أعمال الحفر وتطهير قاع الموقع", category: "structural", sortOrder: 10, checks: ["مطابقة الأبعاد والحدود للمخططات المساحية", "الوصول لمنسوب التأسيس المطلوب"] },
             "str_4_wood": { title: "نجارة القواعد المسلحة واللبشة", category: "structural", sortOrder: 40, checks: ["مراجعة الأبعاد الهندسية والتربيع العام للقواعد والأحط", "تقوية الأخشاب والشكالات"] },
@@ -413,78 +359,35 @@
             "arch_8": { title: "أعمال تركيب الأرضيات (سيراميك / بورسلين)", category: "architectural", sortOrder: 200, checks: ["تحديد منسوب التشطيب العام بناء على الشرب الرئيسي", "مراجعة استواء وميول السيراميك باتجاه بيبات الصرف"] }
         };
 
-        window.allItemsFetchedCached = [];
-        window.latestCalculations = { concrete: null, iron: null, bricks: null, finishes: null };
-        window.confirmCallback = null;
-        window.currentAIReport = null;
+        window.allItemsFetchedCached = []; window.latestCalculations = { concrete: null, iron: null, bricks: null, finishes: null }; window.confirmCallback = null; window.currentAIReport = null;
 
-        // دوال الإشعارات والـ UI
-        window.showNotification = (msg, type = 'info') => {
-            const notif = document.getElementById('custom-notification');
-            notif.innerText = msg;
-            notif.className = type === 'error' ? "fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] transition-all duration-300 bg-red-600 text-white px-6 py-3 rounded-xl shadow-2xl border border-red-500 font-bold text-sm text-center min-w-[300px] translate-y-0 opacity-100" : "fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] transition-all duration-300 bg-emerald-600 text-white px-6 py-3 rounded-xl shadow-2xl border border-emerald-500 font-bold text-sm text-center min-w-[300px] translate-y-0 opacity-100";
-            setTimeout(() => { notif.className = "fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] transition-all duration-300 -translate-y-24 opacity-0 bg-slate-800 text-white px-6 py-3 rounded-xl shadow-2xl border border-slate-700 font-bold text-sm text-center min-w-[300px]"; }, 3000);
-        };
-        window.showConfirm = (msg, callback) => { document.getElementById('confirm-message').innerText = msg; window.confirmCallback = callback; document.getElementById('custom-confirm').classList.remove('hidden'); };
-        window.closeConfirm = () => { document.getElementById('custom-confirm').classList.add('hidden'); window.confirmCallback = null; };
-        document.getElementById('confirm-yes').addEventListener('click', () => { if(window.confirmCallback) window.confirmCallback(); window.closeConfirm(); });
+        window.showNotification = (msg, type = 'info') => { const notif = document.getElementById('custom-notification'); notif.innerText = msg; notif.className = type === 'error' ? "fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] transition-all duration-300 bg-red-600 text-white px-6 py-3 rounded-xl shadow-2xl border border-red-500 font-bold text-sm text-center min-w-[300px] translate-y-0 opacity-100" : "fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] transition-all duration-300 bg-emerald-600 text-white px-6 py-3 rounded-xl shadow-2xl border border-emerald-500 font-bold text-sm text-center min-w-[300px] translate-y-0 opacity-100"; setTimeout(() => { notif.className = "fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] transition-all duration-300 -translate-y-24 opacity-0 bg-slate-800 text-white px-6 py-3 rounded-xl shadow-2xl border border-slate-700 font-bold text-sm text-center min-w-[300px]"; }, 3000); };
+        window.showConfirm = (msg, callback) => { document.getElementById('confirm-message').innerText = msg; window.confirmCallback = callback; document.getElementById('custom-confirm').classList.remove('hidden'); }; window.closeConfirm = () => { document.getElementById('custom-confirm').classList.add('hidden'); window.confirmCallback = null; }; document.getElementById('confirm-yes').addEventListener('click', () => { if(window.confirmCallback) window.confirmCallback(); window.closeConfirm(); });
 
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx;
-        window.playUiSound = (type) => {
-            if(!audioCtx) audioCtx = new AudioContext(); if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.connect(gain); gain.connect(audioCtx.destination);
-            if (type === 'click') { osc.frequency.setValueAtTime(600, audioCtx.currentTime); gain.gain.setValueAtTime(0.05, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + 0.04); }
-            else if (type === 'success') { osc.type = 'triangle'; osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.08); gain.gain.setValueAtTime(0.1, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + 0.25); }
-        };
-
+        const AudioContext = window.AudioContext || window.webkitAudioContext; let audioCtx;
+        window.playUiSound = (type) => { if(!audioCtx) audioCtx = new AudioContext(); if (audioCtx.state === 'suspended') audioCtx.resume(); const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.connect(gain); gain.connect(audioCtx.destination); if (type === 'click') { osc.frequency.setValueAtTime(600, audioCtx.currentTime); gain.gain.setValueAtTime(0.05, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + 0.04); } else if (type === 'success') { osc.type = 'triangle'; osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.08); gain.gain.setValueAtTime(0.1, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + 0.25); } };
         window.changeAppTheme = (theme) => { window.playUiSound('click'); const body = document.getElementById('mainBody'); body.className = theme === 'day' ? "theme-light min-h-screen p-3 md:p-8 selection:bg-amber-500 selection:text-slate-950" : "theme-dark min-h-screen p-3 md:p-8 selection:bg-amber-500 selection:text-slate-950"; };
         window.toggleSection = (id) => { window.playUiSound('click'); const sec = document.getElementById(id); if(id === 'ar-hud-suite') { if(sec.classList.contains('hidden')) { sec.classList.remove('hidden'); window.startARCamera(); } else { window.stopARCamera(); } } else { sec.classList.toggle('hidden'); } };
-
-        window.populatePresets = () => {
-            const selectPreset = document.getElementById('itemPresetKey');
-            selectPreset.innerHTML = "";
-            const sortedGuideKeys = Object.keys(window.presetItemsBank).sort((a, b) => window.presetItemsBank[a].sortOrder - window.presetItemsBank[b].sortOrder);
-            sortedGuideKeys.forEach(key => { const i = window.presetItemsBank[key]; const opt = document.createElement('option'); opt.value = key; opt.innerText = `${i.category==='structural'?'🏗️':'🎨'} ${i.title}`; selectPreset.appendChild(opt); });
-        };
-
+        window.populatePresets = () => { const selectPreset = document.getElementById('itemPresetKey'); selectPreset.innerHTML = ""; const sortedGuideKeys = Object.keys(window.presetItemsBank).sort((a, b) => window.presetItemsBank[a].sortOrder - window.presetItemsBank[b].sortOrder); sortedGuideKeys.forEach(key => { const i = window.presetItemsBank[key]; const opt = document.createElement('option'); opt.value = key; opt.innerText = `${i.category==='structural'?'🏗️':'🎨'} ${i.title}`; selectPreset.appendChild(opt); }); };
         window.openModal = () => { window.playUiSound('click'); window.populatePresets(); document.getElementById('itemDate').value = new Date().toISOString().split('T')[0]; document.getElementById('itemLocation').value = ''; document.getElementById('itemNotes').value = ''; document.getElementById('itemPhotoInput').value = ''; document.getElementById('itemPhotoBase64').value = ''; document.getElementById('photoPreviewContainer').classList.add('hidden'); window.clearSketch(); document.getElementById('itemModal').classList.remove('hidden'); setTimeout(() => { const canvas = document.getElementById('sketchPad'); canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; }, 60); };
         window.closeModal = () => { window.playUiSound('click'); document.getElementById('itemModal').classList.add('hidden'); };
 
-        // AR & Voice
         let arStream = null; window.stopARCamera = () => { window.playUiSound('click'); const video = document.getElementById('arVideoElement'); if(arStream) { arStream.getTracks().forEach(t => t.stop()); video.srcObject = null; arStream = null; } document.getElementById('ar-hud-suite').classList.add('hidden'); }; window.startARCamera = async () => { const video = document.getElementById('arVideoElement'); try { arStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }); video.srcObject = arStream; } catch (err) { window.showNotification("لم يتم العثور على كاميرا أو رفضت الصلاحية.", "error"); document.getElementById('ar-hud-suite').classList.add('hidden'); } }; window.startVoiceInput = (targetId) => { window.playUiSound('click'); const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition; if (!SpeechRecognition) return window.showNotification("المتصفح لا يدعم الإدخال الصوتي.", "error"); const rec = new SpeechRecognition(); rec.lang = 'ar-EG'; const inputField = document.getElementById(targetId); const oldPlaceholder = inputField.placeholder; inputField.placeholder = "جاري الاستماع.. اتكلم 🎤"; rec.onresult = (e) => { inputField.value += (inputField.value ? " " : "") + e.results[0][0].transcript; }; rec.onend = () => { inputField.placeholder = oldPlaceholder; }; rec.start(); };
 
-        // لوحة السكتش والرسم اليدوي وتحويله لـ JPEG المضغوط بذكاء
-        const canvas = document.getElementById('sketchPad'); const ctx = canvas.getContext('2d'); let isDrawing = false;
-        const startDraw = (e) => { isDrawing = true; draw(e); }; const endDraw = () => { isDrawing = false; ctx.beginPath(); };
-        canvas.addEventListener('mousedown', startDraw); canvas.addEventListener('mouseup', endDraw); canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('touchstart', (e) => { const t = e.touches[0]; canvas.dispatchEvent(new MouseEvent("mousedown", { clientX: t.clientX, clientY: t.clientY })); }, { passive: false }); canvas.addEventListener('touchend', () => canvas.dispatchEvent(new MouseEvent("mouseup")), { passive: false }); canvas.addEventListener('touchmove', (e) => { e.preventDefault(); const t = e.touches[0]; canvas.dispatchEvent(new MouseEvent("mousemove", { clientX: t.clientX, clientY: t.clientY })); }, { passive: false });
-        function draw(e) { if (!isDrawing) return; const r = canvas.getBoundingClientRect(); const clientX = e.clientX || (e.touches && e.touches[0].clientX); const clientY = e.clientY || (e.touches && e.touches[0].clientY); const x = (clientX - r.left) * (canvas.width / r.width); const y = (clientY - r.top) * (canvas.height / r.height); ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = '#0f172a'; ctx.lineTo(x, y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x, y); }
-        window.clearSketch = () => { window.playUiSound('click'); ctx.clearRect(0, 0, canvas.width, canvas.height); document.getElementById('itemSketchBase64').value = ''; };
-        
-        window.saveSketchToInput = () => {
-            window.playUiSound('success');
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = canvas.width; tempCanvas.height = canvas.height;
-            const tCtx = tempCanvas.getContext('2d');
-            tCtx.fillStyle = '#ffffff'; tCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-            tCtx.drawImage(canvas, 0, 0);
-            
-            document.getElementById('itemSketchBase64').value = tempCanvas.toDataURL('image/jpeg', 0.6);
-            window.showNotification("تم اعتماد السكتش!", "success");
-        };
+        const canvas = document.getElementById('sketchPad'); const ctx = canvas.getContext('2d'); let isDrawing = false; const startDraw = (e) => { isDrawing = true; draw(e); }; const endDraw = () => { isDrawing = false; ctx.beginPath(); }; canvas.addEventListener('mousedown', startDraw); canvas.addEventListener('mouseup', endDraw); canvas.addEventListener('mousemove', draw); canvas.addEventListener('touchstart', (e) => { const t = e.touches[0]; canvas.dispatchEvent(new MouseEvent("mousedown", { clientX: t.clientX, clientY: t.clientY })); }, { passive: false }); canvas.addEventListener('touchend', () => canvas.dispatchEvent(new MouseEvent("mouseup")), { passive: false }); canvas.addEventListener('touchmove', (e) => { e.preventDefault(); const t = e.touches[0]; canvas.dispatchEvent(new MouseEvent("mousemove", { clientX: t.clientX, clientY: t.clientY })); }, { passive: false }); function draw(e) { if (!isDrawing) return; const r = canvas.getBoundingClientRect(); const clientX = e.clientX || (e.touches && e.touches[0].clientX); const clientY = e.clientY || (e.touches && e.touches[0].clientY); const x = (clientX - r.left) * (canvas.width / r.width); const y = (clientY - r.top) * (canvas.height / r.height); ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = '#0f172a'; ctx.lineTo(x, y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x, y); } window.clearSketch = () => { window.playUiSound('click'); ctx.clearRect(0, 0, canvas.width, canvas.height); document.getElementById('itemSketchBase64').value = ''; };
+        window.saveSketchToInput = () => { window.playUiSound('success'); const tempCanvas = document.createElement('canvas'); tempCanvas.width = canvas.width; tempCanvas.height = canvas.height; const tCtx = tempCanvas.getContext('2d'); tCtx.fillStyle = '#ffffff'; tCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height); tCtx.drawImage(canvas, 0, 0); document.getElementById('itemSketchBase64').value = tempCanvas.toDataURL('image/jpeg', 0.6); window.showNotification("تم اعتماد السكتش!", "success"); };
 
         window.processCapturedPhoto = (input) => { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function (e) { const img = new Image(); img.onload = function() { const c = document.createElement('canvas'); const ct = c.getContext('2d'); c.width = 600; c.height = img.height * (600 / img.width); ct.drawImage(img, 0, 0, c.width, c.height); const base64 = c.toDataURL('image/jpeg', 0.6); const targetInput = input.id === 'aiInspectorFile' ? 'aiPreviewImg' : 'photoPreviewImg'; const targetContainer = input.id === 'aiInspectorFile' ? 'aiPreviewContainer' : 'photoPreviewContainer'; const targetBase64 = input.id === 'aiInspectorFile' ? null : 'itemPhotoBase64'; document.getElementById(targetInput).src = base64; document.getElementById(targetContainer).classList.remove('hidden'); if(targetBase64) document.getElementById(targetBase64).value = base64; }; img.src = e.target.result; }; reader.readAsDataURL(file); };
         window.processAIPhoto = window.processCapturedPhoto; 
 
-        // 🤖 المساعد الهندسي الذكي المتصل الحقيقي (Gemini AI API Integration)
+        // 🤖 المساعد الهندسي الذكي المتصل (Gemini AI API)
         window.runLiveAIAnalysis = async () => {
             window.playUiSound('click');
             const q = document.getElementById('aiInspectorQuery').value;
             const outBox = document.getElementById('aiAnalysisOutputBox');
             if(!q) return window.showNotification("اكتب الموقف أو السؤال أولاً يا هندسة!", "error");
             
-            outBox.innerHTML = `<div class="text-teal-400 font-bold animate-pulse text-center mt-8">⏳ جاري استشارة الذكاء الاصطناعي...</div>`;
+            outBox.innerHTML = `<div class="text-teal-400 font-bold animate-pulse text-center mt-8">⏳ جاري فحص الموقع والذكاء الاصطناعي...</div>`;
             
             try {
                 // المفتاح الفعلي المتصل بحساب جوجل (Google AI Studio)
@@ -495,14 +398,24 @@
 يجب أن يكون ردك مقسم لثلاثة أقسام تفصل بينها علامة | كالتالي بالضبط وبدون أي كلام إضافي:
 التشخيص الهندسي للمشكلة | الإجراء الصحيح المعتمد الذي يجب تنفيذه | جملة واحدة بالعامية المصرية تقولها للمقاول أو الصنايعي ليلتزم بالحل`;
 
+                const partsArray = [{ text: prompt }];
+                const previewImg = document.getElementById('aiPreviewImg').src;
+                if (previewImg && previewImg.startsWith('data:image')) {
+                    const base64Data = previewImg.split(',')[1];
+                    partsArray.push({ inlineData: { data: base64Data, mimeType: "image/jpeg" } });
+                }
+
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.2, maxOutputTokens: 250 } })
+                    body: JSON.stringify({ contents: [{ parts: partsArray }], generationConfig: { temperature: 0.2, maxOutputTokens: 250 } })
                 });
 
-                if(!response.ok) throw new Error('API Request Failed');
+                if(!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error ? errorData.error.message : 'فشل في الاتصال بالسيرفر');
+                }
+
                 const data = await response.json(); const aiText = data.candidates[0].content.parts[0].text;
-                
                 const parts = aiText.split('|').map(p => p.trim());
                 const problemDesc = parts[0] || "تحليل المشكلة غير متوفر."; const actionDesc = parts[1] || aiText; const workerTalk = parts[2] || "نفذ الشغل المطابق للكود يا ريس.";
 
@@ -515,75 +428,32 @@
                         <div class="bg-slate-900 border-r-4 border-emerald-500 p-2.5 rounded-xl"><span class="text-emerald-400 text-[11px] font-bold">🗣️ الرد للصنايعي:</span><p class="text-[12px] text-emerald-300 font-semibold mt-1">"${workerTalk}"</p></div>
                         <button onclick="shareAIReportToWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-500 transition-colors text-white py-2 rounded-lg text-[11px] font-bold shadow-lg mt-2">🟢 إرسال التقرير واتساب للشركة</button>
                     </div>`;
-            } catch (error) { console.error(error); outBox.innerHTML = `<div class="bg-rose-950 border border-rose-800 p-3 rounded-xl text-rose-400 text-xs text-center">❌ حدث خطأ في الاتصال بالسيرفر الذكي. يرجى مراجعة الاتصال بالإنترنت.</div>`; }
+            } catch (error) { 
+                console.error(error); 
+                outBox.innerHTML = `<div class="bg-rose-950 border border-rose-800 p-3 rounded-xl text-rose-400 text-[11px] text-center leading-relaxed">❌ حدث خطأ من السيرفر:<br><span class="font-mono mt-1 block">${error.message}</span><br>تأكد من مفتاح الـ API.</div>`; 
+            }
         };
 
         window.shareAIReportToWhatsApp = () => { window.playUiSound('click'); const q = document.getElementById('aiInspectorQuery').value; const report = window.currentAIReport || { action: "مطلوب مراجعة المهندس المسؤول." }; const text = `*تقرير جودة وفحص ميداني*\n*المهندس المسؤول:* م/ عبدالرحمن محمد زهير (AZ)\n*المشكلة المرصودة:* ${q}\n*الإجراء المعتمد للحل:* ${report.action}`; window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank'); };
 
-        // حاسبات الموقع الفورية
         window.calcLd = () => { window.playUiSound('click'); const d = parseFloat(document.getElementById('ldDia').value)||0; document.getElementById('ldResult').innerHTML = `<p>• الشد (60Φ): <span class="text-indigo-400 font-bold">${Math.ceil(d*6)} سم</span></p><p>• الضغط (40Φ): <span class="text-amber-400 font-bold">${Math.ceil(d*4)} سم</span></p>`; }; window.calcQuickWeight = () => { window.playUiSound('click'); const d = parseFloat(document.getElementById('weightDia').value)||0; const w = (d*d)/162; document.getElementById('quickWeightResult').innerHTML = `<p>• وزن المتر: <span class="text-amber-400 font-bold">${w.toFixed(3)} كجم/م</span></p><p>• السيخ الكامل: <span class="text-amber-400 font-bold">${(w*12).toFixed(2)} كجم</span></p><p>• عدد بـ الطن: <span class="text-emerald-400 font-bold">${Math.floor(1000/(w*12))} سيخ</span></p>`; }; window.calcStirrup = () => { window.playUiSound('click'); const l=parseFloat(document.getElementById('colL').value)||0, w=parseFloat(document.getElementById('colW').value)||0, c=parseFloat(document.getElementById('colCover').value)||0; const total = (2*((l-2*c)+(w-2*c)))+(16); document.getElementById('stirrupResult').innerHTML = `<p class="text-amber-400 font-bold">• طول قص الكانة: ${total.toFixed(1)} سم</p>`; }; window.calcCircularVol = () => { window.playUiSound('click'); const d=parseFloat(document.getElementById('circD').value)||0, h=parseFloat(document.getElementById('circH').value)||0; document.getElementById('circResult').innerHTML = `<p class="text-purple-400 font-bold">• التكعيب: ${(Math.PI*(d/2)*(d/2)*h).toFixed(3)} م³</p>`; };
         window.calcConcreteSuite = () => { window.playUiSound('click'); const l=parseFloat(document.getElementById('concL').value)||0, w=parseFloat(document.getElementById('concW').value)||0, h=parseFloat(document.getElementById('concH').value)||0; const wf = 1 + (parseFloat(document.getElementById('concWaste').value)||0)/100, mix = parseInt(document.getElementById('concMix').value); const nv=l*w*h, gv=nv*wf, tons=(gv*mix)/1000; window.latestCalculations.concrete = { l, w, h, wasteFactor:wf, mix, netVolume:nv, grossVolume:gv, gravel:gv*0.8, sand:gv*0.4, cementTons:tons, cementBags:Math.ceil((tons*1000)/50), waterLiters:gv*175 }; document.getElementById('concResult').innerHTML = `<p>الصافي: ${nv.toFixed(3)} م³</p><p class="text-amber-400">التوريد: ${gv.toFixed(3)} م³</p><p>أسمنت: ${tons.toFixed(2)} طن</p>`; }; window.calcIronSuite = () => { window.playUiSound('click'); const d=parseFloat(document.getElementById('ironD').value)||0, l=parseFloat(document.getElementById('ironL').value)||0; const wf=1+(parseFloat(document.getElementById('ironWaste').value)||0)/100; const nw = ((d*d)/162)*l, gw = nw*wf; const colL=parseFloat(document.getElementById('ironColL').value)||0; const colW=parseFloat(document.getElementById('ironColW').value)||0; const cover = 2.5; const stirrupL = colL && colW ? (2 * ((colL - 2*cover) + (colW - 2*cover))) + 16 : 0; window.latestCalculations.iron = { d, l, wasteFactor:wf, netWeight:nw, grossWeight:gw, stirrupL }; let resHtml = `<p>الصافي: ${nw.toFixed(2)} كجم | التوريد: <span class="text-amber-400">${gw.toFixed(2)} كجم</span></p>`; if (stirrupL > 0) { resHtml += `<p class="text-emerald-400 mt-1 font-bold">• طول الكانة: ${stirrupL.toFixed(1)} سم</p>`; } document.getElementById('ironResult').innerHTML = resHtml; }; window.calcBricksSuite = () => { window.playUiSound('click'); const l=parseFloat(document.getElementById('bL').value)||0, h=parseFloat(document.getElementById('bH').value)||0, op=parseFloat(document.getElementById('bOpenings').value)||0, wf=1+(parseFloat(document.getElementById('bWaste').value)||0)/100; const type=document.getElementById('bType').value, na=(l*h)-op, gb=(na*(type==='half'?55:110))*wf; window.latestCalculations.bricks = { l, h, openings:op, wasteFactor:wf, type, netArea:na, grossBricks:gb, totalCementBags:((na*(type==='half'?0.01:0.022))*1000/50)*wf, totalSandCubic:(na*(type==='half'?0.025:0.05))*wf }; document.getElementById('brickResult').innerHTML = `<p class="text-amber-400">الطوب: ${Math.ceil(gb)} طوبة</p>`; }; window.calcFinishesSuite = () => { window.playUiSound('click'); const area = parseFloat(document.getElementById('finishArea').value) || 0; const openings = parseFloat(document.getElementById('finishOpenings').value) || 0; const waste = 1 + (parseFloat(document.getElementById('finishWaste').value) || 0) / 100; const type = document.getElementById('finishType').value; const netArea = (area - openings) * waste; let res = ""; let typeLabel = ""; if (type === 'tiles') { typeLabel = "أرضيات سيراميك"; const tL = parseFloat(document.getElementById('tileL').value) || 60; const tW = parseFloat(document.getElementById('tileW').value) || 60; const tileArea = (tL / 100) * (tW / 100); const tilesCount = Math.ceil(netArea / tileArea); res = `<p>• سيراميك مقدر: ${Math.ceil(netArea)} م²</p><p class="text-amber-400">• العدد: ${tilesCount} بلاطة تقريباً</p>`; } else if (type === 'plaster') { typeLabel = "بياض محارة"; res = `<p>• مساحة المحارة: ${Math.ceil(netArea)} م²</p><p class="text-amber-400">• مونة (تقريبي): ${(netArea * 0.015).toFixed(2)} م³</p>`; } else { typeLabel = "دهانات ونقاشة"; res = `<p>• مساحة الدهان: ${Math.ceil(netArea)} م²</p><p class="text-amber-400">• بستلات: ${Math.ceil(netArea / 30)} (وجهين)</p>`; } window.latestCalculations.finishes = { type: typeLabel, netArea, resultText: res }; document.getElementById('finishResult').innerHTML = res; }; window.toggleFinishesSubInputs = () => { document.getElementById('tiles-sub-inputs').classList.toggle('hidden', document.getElementById('finishType').value !== 'tiles'); };
 
-        // 🖨️ طباعة التقارير المحدثة
         window.printInspectionReport = () => {
-            window.playUiSound('click');
-            const tbody = document.getElementById('print-table-body');
-            tbody.innerHTML = '';
-            
-            if(window.allItemsFetchedCached.length === 0) {
-                window.showNotification("لا توجد بنود مطروحة للطباعة", "error");
-                return;
-            }
-
+            window.playUiSound('click'); const tbody = document.getElementById('print-table-body'); tbody.innerHTML = '';
+            if(window.allItemsFetchedCached.length === 0) { window.showNotification("لا توجد بنود مطروحة للطباعة", "error"); return; }
             window.allItemsFetchedCached.forEach(docData => {
-                const item = docData.data;
-                const isStructural = item.category === 'structural';
-                
-                let attachmentsHtml = '';
-                if(item.photoUrl) attachmentsHtml += `<img src="${item.photoUrl}" class="print-img">`;
-                if(item.sketchUrl) attachmentsHtml += `<img src="${item.sketchUrl}" class="print-img">`;
-                if(!attachmentsHtml) attachmentsHtml = '<span style="color:#666; font-size:10px;">لا توجد مرفقات</span>';
-
-                let checkedHtml = '';
-                if(item.checks && item.checkedStates) {
-                    item.checks.forEach((check, idx) => {
-                        if(item.checkedStates[idx] === true) {
-                            checkedHtml += `<div class="check-list-print">✔️ تم مراجعة: ${check}</div>`;
-                        }
-                    });
-                }
-
-                tbody.innerHTML += `
-                    <tr>
-                        <td class="border border-black p-2 text-right font-bold" style="vertical-align: top;">${item.title}</td>
-                        <td class="border border-black p-2 text-right" style="vertical-align: top;">${item.location}</td>
-                        <td class="border border-black p-2 text-center" style="vertical-align: top;">${isStructural ? 'إنشائي' : 'معماري'}</td>
-                        <td class="border border-black p-2 text-right" style="vertical-align: top;">
-                            <div style="margin-bottom: 6px;">${item.notes || 'لا توجد ملاحظات إضافية.'}</div>
-                            ${checkedHtml}
-                        </td>
-                        <td class="border border-black p-2 text-center" style="vertical-align: middle;">
-                            ${attachmentsHtml}
-                        </td>
-                        <td class="border border-black p-2 text-center" style="vertical-align: bottom; height: 60px;">
-                            <br><br>.....................
-                        </td>
-                    </tr>
-                `;
+                const item = docData.data; const isStructural = item.category === 'structural';
+                let attachmentsHtml = ''; if(item.photoUrl) attachmentsHtml += `<img src="${item.photoUrl}" class="print-img">`; if(item.sketchUrl) attachmentsHtml += `<img src="${item.sketchUrl}" class="print-img">`; if(!attachmentsHtml) attachmentsHtml = '<span style="color:#666; font-size:10px;">لا توجد مرفقات</span>';
+                let checkedHtml = ''; if(item.checks && item.checkedStates) { item.checks.forEach((check, idx) => { if(item.checkedStates[idx] === true) { checkedHtml += `<div class="check-list-print">✔️ تم مراجعة: ${check}</div>`; } }); }
+                tbody.innerHTML += `<tr><td class="border border-black p-2 text-right font-bold" style="vertical-align: top;">${item.title}</td><td class="border border-black p-2 text-right" style="vertical-align: top;">${item.location}</td><td class="border border-black p-2 text-center" style="vertical-align: top;">${isStructural ? 'إنشائي' : 'معماري'}</td><td class="border border-black p-2 text-right" style="vertical-align: top;"><div style="margin-bottom: 6px;">${item.notes || 'لا توجد ملاحظات إضافية.'}</div>${checkedHtml}</td><td class="border border-black p-2 text-center" style="vertical-align: middle;">${attachmentsHtml}</td><td class="border border-black p-2 text-center" style="vertical-align: bottom; height: 60px;"><br><br>.....................</td></tr>`;
             });
-
-            tbody.innerHTML += `<tr><td colspan="6" class="border-0 p-8 pt-12"><div style="display: flex; justify-content: space-around; text-align: center; font-weight: bold; font-size: 14px;"><div>المهندس المسؤول والمشرف العام<br>م/ عبدالرحمن محمد زهير (AZ)</div><div>الاستشاري / المشرف المستلم<br>..................................</div></div></td></tr>`;
-            
-            const now = new Date();
-            const dateString = now.toLocaleDateString('ar-EG');
-            const timeString = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
-            document.getElementById('print-date').innerText = `${dateString} - ${timeString}`;
-            
-            document.getElementById('print-zone').classList.remove('hidden'); document.getElementById('print-calc-zone').classList.add('hidden');
-            window.print(); document.getElementById('print-zone').classList.add('hidden');
+            tbody.innerHTML += `<tr><td colspan="6" class="border-0 p-8 pt-12"><div style="display: flex; justify-content: space-around; text-align: center; font-weight: bold; font-size: 14px;"><div>المهندس المسؤول والمشرف العام<br>Eng. Abdelrahman Mohamed Zoher (AZ)</div><div>الاستشاري / المشرف المستلم<br>..................................</div></div></td></tr>`;
+            const now = new Date(); const dateString = now.toLocaleDateString('ar-EG'); const timeString = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }); document.getElementById('print-date').innerText = `${dateString} - ${timeString}`;
+            document.getElementById('print-zone').classList.remove('hidden'); document.getElementById('print-calc-zone').classList.add('hidden'); window.print(); document.getElementById('print-zone').classList.add('hidden');
         };
 
-        window.printCalculationReport = () => { window.playUiSound('click'); const tbody = document.getElementById('print-calc-table-body'); tbody.innerHTML = ''; const c = window.latestCalculations.concrete; if(c) tbody.innerHTML += `<tr><td class="border border-black p-2 text-right">خرسانة</td><td class="border border-black p-2 text-right">محتوى ${c.mix} كجم/م³</td><td class="border border-black p-2 text-center">${c.netVolume.toFixed(2)} م³</td><td class="border border-black p-2 text-center">${c.grossVolume.toFixed(2)} م³</td><td class="border border-black p-2 text-right">أسمنت: ${c.cementTons.toFixed(2)} طن</td></tr>`; const i = window.latestCalculations.iron; if(i) tbody.innerHTML += `<tr><td class="border border-black p-2 text-right">حديد تسليح</td><td class="border border-black p-2 text-right">قطر ${i.d} مم</td><td class="border border-black p-2 text-center">${i.netWeight.toFixed(2)} كجم</td><td class="border border-black p-2 text-center">${i.grossWeight.toFixed(2)} كجم</td><td class="border border-black p-2 text-right">طول الكانة للعمود: ${i.stirrupL ? i.stirrupL.toFixed(1) : '-'} سم</td></tr>`; const b = window.latestCalculations.bricks; if(b) tbody.innerHTML += `<tr><td class="border border-black p-2 text-right">مباني</td><td class="border border-black p-2 text-right">${b.type==='half'?'نصف طوبة (12 سم)':'طوبة كاملة (25 سم)'}</td><td class="border border-black p-2 text-center">${b.netArea.toFixed(2)} م²</td><td class="border border-black p-2 text-center">-</td><td class="border border-black p-2 text-right">${Math.ceil(b.grossBricks)} طوبة تقريباً</td></tr>`; const f = window.latestCalculations.finishes; if(f) tbody.innerHTML += `<tr><td class="border border-black p-2 text-right">تشطيبات</td><td class="border border-black p-2 text-right">${f.type}</td><td class="border border-black p-2 text-center">${f.netArea.toFixed(2)} م²</td><td class="border border-black p-2 text-center">-</td><td class="border border-black p-2 text-right">${f.resultText.replace(/<[^>]*>?/gm, ' ')}</td></tr>`; if(!c && !i && !b && !f) { window.showNotification("قم بإجراء حسابات أولاً لطباعتها!", "error"); return; } tbody.innerHTML += `<tr><td colspan="5" class="border-0 p-8 pt-12"><div style="display: flex; justify-content: space-around; text-align: center; font-weight: bold; font-size: 14px;"><div>مهندس الحصر والتسعير<br>م/ عبدالرحمن محمد زهير (AZ)</div><div>الاعتماد والمراجعة الفنية<br>..................................</div></div></td></tr>`; document.getElementById('print-zone').classList.add('hidden'); document.getElementById('print-calc-zone').classList.remove('hidden'); window.print(); document.getElementById('print-calc-zone').classList.add('hidden'); };
+        window.printCalculationReport = () => { window.playUiSound('click'); const tbody = document.getElementById('print-calc-table-body'); tbody.innerHTML = ''; const c = window.latestCalculations.concrete; if(c) tbody.innerHTML += `<tr><td class="border border-black p-2 text-right">خرسانة</td><td class="border border-black p-2 text-right">محتوى ${c.mix} كجم/م³</td><td class="border border-black p-2 text-center">${c.netVolume.toFixed(2)} م³</td><td class="border border-black p-2 text-center">${c.grossVolume.toFixed(2)} م³</td><td class="border border-black p-2 text-right">أسمنت: ${c.cementTons.toFixed(2)} طن</td></tr>`; const i = window.latestCalculations.iron; if(i) tbody.innerHTML += `<tr><td class="border border-black p-2 text-right">حديد تسليح</td><td class="border border-black p-2 text-right">قطر ${i.d} مم</td><td class="border border-black p-2 text-center">${i.netWeight.toFixed(2)} كجم</td><td class="border border-black p-2 text-center">${i.grossWeight.toFixed(2)} كجم</td><td class="border border-black p-2 text-right">طول الكانة للعمود: ${i.stirrupL ? i.stirrupL.toFixed(1) : '-'} سم</td></tr>`; const b = window.latestCalculations.bricks; if(b) tbody.innerHTML += `<tr><td class="border border-black p-2 text-right">مباني</td><td class="border border-black p-2 text-right">${b.type==='half'?'نصف طوبة (12 سم)':'طوبة كاملة (25 سم)'}</td><td class="border border-black p-2 text-center">${b.netArea.toFixed(2)} م²</td><td class="border border-black p-2 text-center">-</td><td class="border border-black p-2 text-right">${Math.ceil(b.grossBricks)} طوبة تقريباً</td></tr>`; const f = window.latestCalculations.finishes; if(f) tbody.innerHTML += `<tr><td class="border border-black p-2 text-right">تشطيبات</td><td class="border border-black p-2 text-right">${f.type}</td><td class="border border-black p-2 text-center">${f.netArea.toFixed(2)} م²</td><td class="border border-black p-2 text-center">-</td><td class="border border-black p-2 text-right">${f.resultText.replace(/<[^>]*>?/gm, ' ')}</td></tr>`; if(!c && !i && !b && !f) { window.showNotification("قم بإجراء حسابات أولاً لطباعتها!", "error"); return; } tbody.innerHTML += `<tr><td colspan="5" class="border-0 p-8 pt-12"><div style="display: flex; justify-content: space-around; text-align: center; font-weight: bold; font-size: 14px;"><div>مهندس الحصر والتسعير<br>Eng. Abdelrahman Mohamed Zoher (AZ)</div><div>الاعتماد والمراجعة الفنية<br>..................................</div></div></td></tr>`; document.getElementById('print-zone').classList.add('hidden'); document.getElementById('print-calc-zone').classList.remove('hidden'); window.print(); document.getElementById('print-calc-zone').classList.add('hidden'); };
 
         window.saveItem = () => window.showNotification("جاري تهيئة منظومة الرفع الاحتياطي الميداني...", "error"); window.deleteItem = () => window.showNotification("جاري تهيئة منظومة الرفع الاحتياطي الميداني...", "error"); window.updateCheckStatus = () => {}; window.onload = () => { window.populatePresets(); };
     </script>
