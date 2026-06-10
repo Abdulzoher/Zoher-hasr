@@ -25,6 +25,7 @@
         .scanline { width: 100%; height: 2px; background: rgba(45, 212, 191, 0.7); position: absolute; box-shadow: 0 0 10px rgba(45, 212, 191, 1); animation: scan 3s linear infinite; }
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
 
+        /* إعدادات الطباعة الاحترافية */
         @media print {
             body { background: white; color: black; padding: 0; }
             .no-print { display: none !important; }
@@ -82,7 +83,6 @@
 
         <main class="max-w-7xl mx-auto space-y-6">
 
-            <!-- AR View -->
             <section id="ar-hud-suite" class="hidden relative w-full h-[500px] bg-black rounded-3xl overflow-hidden border-2 border-indigo-500/50 shadow-2xl shadow-indigo-900/20">
                 <div class="absolute inset-0 z-0 bg-slate-900 flex items-center justify-center text-slate-500 text-sm">جاري فتح الكاميرا الميدانية...</div>
                 <video id="arVideoElement" class="absolute inset-0 w-full h-full object-cover z-10" autoplay playsinline></video>
@@ -99,7 +99,6 @@
                 <button onclick="stopARCamera()" class="absolute bottom-4 left-4 z-30 bg-red-600 hover:bg-red-500 text-white p-2 rounded-xl text-xs font-bold shadow-lg border border-red-400 transition-all cursor-pointer pointer-events-auto">إغلاق المعاينة ✖</button>
             </section>
 
-            <!-- Quick Calcs -->
             <section id="quick-calcs-suite" class="hidden bg-slate-900/80 p-6 rounded-3xl shadow-2xl border border-blue-900/40 space-y-4">
                 <div class="border-b border-slate-800 pb-2">
                     <h2 class="text-md font-black text-blue-400 flex items-center gap-2">🧮 حاسبة الميدان السريعة (Ld والتفاصيل)</h2>
@@ -139,11 +138,10 @@
                 </div>
             </section>
 
-            <!-- 🤖 المساعد الهندسي الذكي (OpenAI Integration) -->
             <section id="ai-inspector-suite" class="hidden bg-slate-900/80 p-6 rounded-3xl shadow-2xl border border-teal-900/40 space-y-4">
                 <div class="border-b border-slate-800 pb-2">
-                    <h2 class="text-md font-black text-teal-400 flex items-center gap-2">🤖 المساعد الهندسي ومحلل الصور الفوري (AI Vision)</h2>
-                    <p class="text-[11px] text-slate-400 mt-1">صور أي مشكلة أو خطأ حدادة من الموقع والذكاء الاصطناعي (ChatGPT) هيطلعلك التقرير والرد فورا!</p>
+                    <h2 class="text-md font-black text-teal-400 flex items-center gap-2">🤖 المساعد الهندسي ومحلل الصور الفوري (ChatGPT Vision)</h2>
+                    <p class="text-[11px] text-slate-400 mt-1">صور أي مشكلة من الموقع (تعشيش، حدادة، شروخ) والذكاء الاصطناعي هيحللها ويطلعلك الرد فورا!</p>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
                     <div class="space-y-3">
@@ -169,13 +167,13 @@
                 </div>
             </section>
 
-            <!-- حاسبات الكميات -->
             <section id="calc-suite" class="hidden bg-slate-900/80 p-6 rounded-3xl shadow-2xl border border-slate-800 space-y-6">
                 <div class="border-b border-slate-800 pb-3 flex justify-between items-center">
                     <h2 class="text-md font-black text-amber-400 flex items-center gap-2 gold-glow">📐 حاسبة الخامات الذكية الشاملة</h2>
                     <button onclick="printCalculationReport()" class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-slate-950 font-black px-4 py-2 rounded-xl text-xs shadow-lg transition-all cursor-pointer">🖨️ طباعة تقرير الحصر</button>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
+                    
                     <div class="premium-card p-4 rounded-2xl space-y-2.5">
                         <h3 class="text-xs font-bold text-blue-400 border-b border-slate-800/60 pb-1.5">🏗️ 1. خرسانات وهادر الصب</h3>
                         <div class="grid grid-cols-3 gap-1">
@@ -188,6 +186,7 @@
                         <button onclick="calcConcreteSuite()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded-xl text-xs cursor-pointer">احسب الخرسانة</button>
                         <div id="concResult" class="text-[11px] font-semibold text-emerald-400 mt-2 space-y-1 bg-slate-950/40 p-2 rounded-lg"></div>
                     </div>
+                    
                     <div class="premium-card p-4 rounded-2xl space-y-2.5">
                         <h3 class="text-xs font-bold text-slate-300 border-b border-slate-800/60 pb-1.5">⛓️ 2. حديد التسليح والقصيات</h3>
                         <div class="grid grid-cols-2 gap-1">
@@ -195,13 +194,16 @@
                             <div><label class="block text-[10px] text-slate-400 mb-0.5">الأطوال (م)</label><input type="number" id="ironL" value="12" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
                         </div>
                         <div><label class="block text-[10px] text-slate-400 font-bold mb-1">📉 الهادر (%) :</label><input type="number" id="ironWaste" value="5" class="w-full bg-slate-950/60 border border-slate-800 p-2 rounded-lg text-xs text-amber-400 font-bold"></div>
+                        
                         <div class="grid grid-cols-2 gap-1 mt-2 border-t border-slate-800/60 pt-2">
                             <div><label class="block text-[9px] text-slate-400 mb-0.5">طول العمود(سم)</label><input type="number" id="ironColL" value="60" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
                             <div><label class="block text-[9px] text-slate-400 mb-0.5">عرض العمود(سم)</label><input type="number" id="ironColW" value="30" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
                         </div>
+
                         <button onclick="calcIronSuite()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 rounded-xl text-xs cursor-pointer mt-1">احسب الحديد والكانات</button>
                         <div id="ironResult" class="text-[11px] font-semibold text-emerald-400 mt-2 space-y-1 bg-slate-950/40 p-2 rounded-lg"></div>
                     </div>
+                    
                     <div class="premium-card p-4 rounded-2xl space-y-2.5">
                         <h3 class="text-xs font-bold text-amber-500 border-b border-slate-800/60 pb-1.5">🧱 3. المباني وخصم الفتحات</h3>
                         <div class="grid grid-cols-2 gap-1">
@@ -216,6 +218,7 @@
                         <button onclick="calcBricksSuite()" class="w-full bg-amber-500 text-slate-950 font-black py-2 rounded-xl text-xs cursor-pointer">احسب الطوب</button>
                         <div id="brickResult" class="text-[11px] font-semibold text-emerald-400 mt-2 space-y-1 bg-slate-950/40 p-2 rounded-lg"></div>
                     </div>
+                    
                     <div class="premium-card p-4 rounded-2xl space-y-2">
                         <h3 class="text-xs font-bold text-purple-400 border-b border-slate-800/60 pb-1.5">🎨 4. حاسبة التشطيبات</h3>
                         <div><label class="block text-[10px] text-slate-400 mb-0.5">المساحة الإجمالية (م²)</label><input type="number" id="finishArea" value="120" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
@@ -384,7 +387,7 @@
         window.processCapturedPhoto = (input) => { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function (e) { const img = new Image(); img.onload = function() { const c = document.createElement('canvas'); const ct = c.getContext('2d'); c.width = 600; c.height = img.height * (600 / img.width); ct.drawImage(img, 0, 0, c.width, c.height); const base64 = c.toDataURL('image/jpeg', 0.6); const targetInput = input.id === 'aiInspectorFile' ? 'aiPreviewImg' : 'photoPreviewImg'; const targetContainer = input.id === 'aiInspectorFile' ? 'aiPreviewContainer' : 'photoPreviewContainer'; const targetBase64 = input.id === 'aiInspectorFile' ? null : 'itemPhotoBase64'; document.getElementById(targetInput).src = base64; document.getElementById(targetContainer).classList.remove('hidden'); if(targetBase64) document.getElementById(targetBase64).value = base64; }; img.src = e.target.result; }; reader.readAsDataURL(file); };
         window.processAIPhoto = window.processCapturedPhoto; 
 
-        // 🤖 المساعد الهندسي الذكي المتصل (OpenAI / ChatGPT API Integration)
+        // 🤖 المساعد الهندسي الذكي المتصل (OpenAI / ChatGPT API Integration) مع دعم الموبايل عبر Proxy
         window.runLiveAIAnalysis = async () => {
             window.playUiSound('click');
             const q = document.getElementById('aiInspectorQuery').value;
@@ -394,22 +397,21 @@
             outBox.innerHTML = `<div class="text-teal-400 font-bold animate-pulse text-center mt-8">⏳ جاري فحص الموقع والذكاء الاصطناعي (ChatGPT)...</div>`;
             
             try {
-                // مفتاح OpenAI الخاص بك
+                // المفتاح الفعلي المتصل بحساب OpenAI
                 const API_KEY = "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";
 
-                // تجهيز المحتوى (النص والصورة إن وجدت)
                 const userContent = [{ type: "text", text: `المشكلة المكتوبة: "${q}"` }];
                 const previewImg = document.getElementById('aiPreviewImg').src;
                 if (previewImg && previewImg.startsWith('data:image')) {
                     userContent.push({ type: "image_url", image_url: { url: previewImg } });
                 }
 
-                // الاتصال بـ OpenAI API
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                // تم تركيب بروكسي آمن يعمل على الموبايل واللابتوب لتخطي حماية المتصفح (CORS)
+                const response = await fetch('https://corsproxy.io/?https://api.openai.com/v1/chat/completions', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${API_KEY}` },
                     body: JSON.stringify({
-                        model: "gpt-4o-mini", // الموديل الأسرع والأذكى في تحليل الصور
+                        model: "gpt-4o-mini",
                         messages: [
                             {
                                 role: "system",
@@ -448,7 +450,7 @@
                     </div>`;
             } catch (error) { 
                 console.error(error); 
-                outBox.innerHTML = `<div class="bg-rose-950 border border-rose-800 p-3 rounded-xl text-rose-400 text-[11px] text-center leading-relaxed">❌ حدث خطأ من السيرفر:<br><span class="font-mono mt-1 block">${error.message}</span></div>`; 
+                outBox.innerHTML = `<div class="bg-rose-950 border border-rose-800 p-3 rounded-xl text-rose-400 text-[11px] text-center leading-relaxed">❌ حدث خطأ من السيرفر أو الوسيط:<br><span class="font-mono mt-1 block">${error.message}</span></div>`; 
             }
         };
 
@@ -476,7 +478,6 @@
         window.saveItem = () => window.showNotification("جاري تهيئة منظومة الرفع الاحتياطي الميداني...", "error"); window.deleteItem = () => window.showNotification("جاري تهيئة منظومة الرفع الاحتياطي الميداني...", "error"); window.updateCheckStatus = () => {}; window.onload = () => { window.populatePresets(); };
     </script>
 
-    <!-- محرك قاعدة البيانات السحابية (Firebase Module) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { initializeFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc, updateDoc, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
