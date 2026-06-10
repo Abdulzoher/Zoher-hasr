@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>م/ عبدالرحمن محمد زهير | المنظومة الشاملة لإدارة وحصر الموقع</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style> 
+        body { font-family: 'Cairo', sans-serif; transition: background-color 0.3s, color 0.3s; }
+        .premium-card { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid rgba(148, 163, 184, 0.1); }
+        .gold-glow { text-shadow: 0 0 10px rgba(245, 158, 11, 0.3); }
+        .sketch-canvas { border: 2px solid #334155; border-radius: 12px; width: 100%; height: 180px; background: white; cursor: crosshair; touch-action: none; }
+        
+        /* كلاسات الثيم (نهار/ليل) */
+        .theme-dark { background-color: #020617; color: #f1f5f9; }
+        .theme-light { background-color: #f8fafc; color: #0f172a; }
+        .theme-light .bg-slate-900\/90, .theme-light .bg-slate-900\/80, .theme-light .bg-slate-900\/40 { background-color: #ffffff !important; border-color: #cbd5e1 !important; color: #0f172a !important; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .theme-light h1, .theme-light h2, .theme-light h3 { color: #0f172a !important; }
+        .theme-light .bg-slate-950, .theme-light .bg-slate-900 { background-color: #f1f5f9 !important; border-color: #cbd5e1 !important; color: #0f172a !important;}
+        .theme-light input, .theme-light textarea, .theme-light select { background-color: #ffffff !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; }
+        .theme-light .premium-card { background: #ffffff !important; border: 1px solid #cbd5e1 !important; }
+
+        /* تأثيرات المسح بالواقع المعزز */
+        .scanline { width: 100%; height: 2px; background: rgba(45, 212, 191, 0.7); position: absolute; box-shadow: 0 0 10px rgba(45, 212, 191, 1); animation: scan 3s linear infinite; }
+        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+
+        @media print {
+            body { background: white; color: black; padding: 0; }
+            .no-print { display: none !important; }
+            .print-page { display: block !important; width: 100%; page-break-after: always; }
+            /* منع قص الصفوف أثناء الطباعة */
+            tr { page-break-inside: avoid; }
+            /* تنسيق عرض الصور في التقرير */
+            .print-img { max-width: 70px !important; max-height: 70px !important; object-fit: cover; border: 1px solid #ccc; border-radius: 6px; display: inline-block; margin: 2px; }
+            /* تنسيق نقاط الفحص المعتمدة */
+            .check-list-print { font-size: 10px; color: #15803d; margin-top: 5px; font-weight: 600; }
+        }
+    </style>
+</head>
+<body id="mainBody" class="theme-dark min-h-screen p-3 md:p-8 selection:bg-amber-500 selection:text-slate-950">
+
+    <div id="custom-notification" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] transition-all duration-300 -translate-y-24 opacity-0 text-white px-6 py-3 rounded-xl shadow-2xl font-bold text-sm text-center min-w-[300px]"></div>
+
+    <div id="custom-confirm" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center p-4 z-[100] backdrop-blur-sm">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 max-w-sm w-full shadow-2xl text-center">
+            <h3 id="confirm-message" class="text-md font-bold mb-6 text-white leading-relaxed"></h3>
+            <div class="flex gap-3">
+                <button id="confirm-yes" class="flex-1 bg-red-600 hover:bg-red-500 text-white py-2.5 rounded-xl text-xs font-bold transition-colors shadow-lg">تأكيد ومسح</button>
+                <button onclick="closeConfirm()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-200 py-2.5 rounded-xl text-xs font-bold transition-colors">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="app-content" class="no-print">
+        <div class="max-w-7xl mx-auto mb-3 flex justify-end gap-2 no-print">
+            <button onclick="changeAppTheme('day')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-3 py-1.5 rounded-xl text-xs flex items-center gap-1 shadow-md transition-all cursor-pointer">☀️ إضاءة نهارية</button>
+            <button onclick="changeAppTheme('night')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold px-3 py-1.5 rounded-xl text-xs flex items-center gap-1 shadow-md transition-all cursor-pointer border border-slate-700">🌙 إضاءة ليلية</button>
+        </div>
+
+        <header class="max-w-7xl mx-auto mb-6 bg-slate-900/90 backdrop-blur-md p-6 rounded-3xl shadow-2xl border border-slate-800 flex flex-col lg:flex-row justify-between items-center gap-6">
+            <div class="w-full lg:w-auto">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                    <span class="bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black px-4 py-1.5 rounded-xl text-xs md:text-sm tracking-wider shadow-lg shadow-amber-500/20 text-center sm:text-right">AZ Developments</span>
+                    <h1 class="text-md font-bold text-white text-center sm:text-right">م/ عبدالرحمن محمد زهير - المهندس المسؤول</h1>
+                    <span id="networkStatusBadge" class="inline-flex items-center gap-1 bg-emerald-950 text-emerald-400 border border-emerald-800 rounded-lg px-2 py-0.5 text-[10px] font-bold justify-center">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> متصل بالشبكة
+                    </span>
+                </div>
+                <div class="flex flex-wrap justify-center sm:justify-start gap-4 text-[11px] text-slate-400 mt-3 border-t border-slate-800/60 pt-2">
+                    <span class="flex items-center gap-1"> 📞 <a href="tel:+201091032335" class="hover:text-amber-400 transition-colors" dir="ltr" style="unicode-bidi: isolate; text-align: left;">+20 109 103 2335</a></span>
+                    <span class="flex items-center gap-1">✉️ <a href="mailto:Abdulrahmanzoher@gmail.com" class="hover:text-amber-400 transition-colors">Abdulrahmanzoher@gmail.com</a></span>
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap gap-2 w-full lg:w-auto">
+                <button onclick="toggleSection('ar-hud-suite')" class="flex-1 lg:flex-none bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-2 rounded-xl text-xs shadow-lg transition-all cursor-pointer border border-indigo-500">👁️ معاينة AR للموقع</button>
+                <button onclick="toggleSection('ai-inspector-suite')" class="flex-1 lg:flex-none bg-teal-600 hover:bg-teal-500 text-white font-bold px-3 py-2 rounded-xl text-xs shadow-lg transition-all cursor-pointer border border-teal-500">🤖 المساعد الذكي</button>
+                <button onclick="toggleSection('quick-calcs-suite')" class="flex-1 lg:flex-none bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-2 rounded-xl text-xs shadow-lg transition-all cursor-pointer border border-blue-500">🧮 حاسبة الميدان</button>
+                <button onclick="toggleSection('calc-suite')" class="flex-1 lg:flex-none bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-slate-950 font-black px-3 py-2 rounded-xl text-xs shadow-lg transition-all cursor-pointer">📐 حاسبة الكميات</button>
+                <button onclick="openModal()" class="flex-1 lg:flex-none bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-2 rounded-xl text-xs shadow-lg transition-all cursor-pointer border border-emerald-500">➕ تفعيل بند جديد</button>
+                <button onclick="printInspectionReport()" class="flex-1 lg:flex-none bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold px-3 py-2 rounded-xl text-xs border border-slate-700 transition-all cursor-pointer">🖨️ طباعة تقرير الاستلام</button>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto space-y-6">
+
+            <section id="ar-hud-suite" class="hidden relative w-full h-[500px] bg-black rounded-3xl overflow-hidden border-2 border-indigo-500/50 shadow-2xl shadow-indigo-900/20">
+                <div class="absolute inset-0 z-0 bg-slate-900 flex items-center justify-center text-slate-500 text-sm">جاري فتح الكاميرا الميدانية...</div>
+                <video id="arVideoElement" class="absolute inset-0 w-full h-full object-cover z-10" autoplay playsinline></video>
+                
+                <div class="absolute inset-0 z-20 pointer-events-none p-4 flex flex-col justify-between">
+                    <div class="flex justify-between items-start">
+                        <div class="bg-black/50 backdrop-blur text-indigo-400 font-mono text-[10px] p-2 rounded border border-indigo-500/30">
+                            ENG. ZOHEIR AR SYSTEM<br>STATUS: SCANNING...<br>GPS: ONLINE
+                        </div>
+                        <div class="bg-black/50 backdrop-blur text-amber-400 font-mono text-[10px] p-2 rounded border border-amber-500/30">
+                            TARGET: REINFORCEMENT<br>CHECK: Ld & SPACING
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-64 h-64 mx-auto border-2 border-indigo-400/50">
+                        <div class="absolute -top-2 -left-2 w-6 h-6 border-t-4 border-l-4 border-indigo-400"></div>
+                        <div class="absolute -top-2 -right-2 w-6 h-6 border-t-4 border-r-4 border-indigo-400"></div>
+                        <div class="absolute -bottom-2 -left-2 w-6 h-6 border-b-4 border-l-4 border-indigo-400"></div>
+                        <div class="absolute -bottom-2 -right-2 w-6 h-6 border-b-4 border-r-4 border-indigo-400"></div>
+                        <div class="scanline"></div>
+                        <div class="absolute inset-0 flex items-center justify-center"><span class="text-indigo-400/70 text-4xl">+</span></div>
+                    </div>
+
+                    <div class="text-center text-white font-bold text-xs bg-black/60 p-2 rounded-xl mx-auto backdrop-blur border border-slate-700">
+                        وجه الكاميرا نحو تفصيلة الحديد أو اللوحة لمعاينة الأبعاد
+                    </div>
+                </div>
+
+                <button onclick="stopARCamera()" class="absolute bottom-4 left-4 z-30 bg-red-600 hover:bg-red-500 text-white p-2 rounded-xl text-xs font-bold shadow-lg border border-red-400 transition-all cursor-pointer pointer-events-auto">إغلاق المعاينة ✖</button>
+            </section>
+
+            <section id="quick-calcs-suite" class="hidden bg-slate-900/80 p-6 rounded-3xl shadow-2xl border border-blue-900/40 space-y-4">
+                <div class="border-b border-slate-800 pb-2">
+                    <h2 class="text-md font-black text-blue-400 flex items-center gap-2">🧮 حاسبة الميدان السريعة (Ld والتفاصيل)</h2>
+                    <p class="text-[11px] text-slate-400 mt-1">حسابات فورية لأطوال التماسك وأوزان الحديد وأنت واقف وسط الموقع.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
+                    <div class="premium-card p-4 rounded-2xl space-y-3">
+                        <h3 class="text-xs font-bold text-indigo-400 border-b border-slate-800/60 pb-1.5">🔗 طول رباط التماسك (Ld)</h3>
+                        <div>
+                            <label class="block text-[10px] text-slate-400 mb-1">قطر السيخ (مم):</label>
+                            <input type="number" id="ldDia" value="16" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white">
+                        </div>
+                        <button onclick="calcLd()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 rounded-xl text-[10px] cursor-pointer">احسب أطوال الركوب</button>
+                        <div id="ldResult" class="text-[10px] font-semibold mt-2 space-y-1 bg-slate-950/40 p-2 rounded-lg text-slate-300"></div>
+                    </div>
+
+                    <div class="premium-card p-4 rounded-2xl space-y-3">
+                        <h3 class="text-xs font-bold text-amber-500 border-b border-slate-800/60 pb-1.5">⚖️ وزن وحصر أسياخ</h3>
+                        <div>
+                            <label class="block text-[10px] text-slate-400 mb-1">قطر السيخ (مم):</label>
+                            <input type="number" id="weightDia" value="12" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white">
+                        </div>
+                        <button onclick="calcQuickWeight()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 rounded-xl text-[10px] cursor-pointer">احسب الوزن والعدد</button>
+                        <div id="quickWeightResult" class="text-[10px] font-semibold mt-2 space-y-1 bg-slate-950/40 p-2 rounded-lg text-slate-300"></div>
+                    </div>
+
+                    <div class="premium-card p-4 rounded-2xl space-y-3">
+                        <h3 class="text-xs font-bold text-emerald-400 border-b border-slate-800/60 pb-1.5">📏 مقاس قص الكانة</h3>
+                        <div class="grid grid-cols-2 gap-1">
+                            <div><label class="block text-[9px] text-slate-400 mb-0.5">طول العمود(سم)</label><input type="number" id="colL" value="60" class="w-full bg-slate-950/60 border border-slate-800 p-1 rounded-lg text-xs text-white"></div>
+                            <div><label class="block text-[9px] text-slate-400 mb-0.5">عرض العمود(سم)</label><input type="number" id="colW" value="30" class="w-full bg-slate-950/60 border border-slate-800 p-1 rounded-lg text-xs text-white"></div>
+                        </div>
+                        <div>
+                            <label class="block text-[9px] text-slate-400 mb-0.5">كفر خرساني (سم):</label>
+                            <input type="number" id="colCover" value="2.5" class="w-full bg-slate-950/60 border border-slate-800 p-1 rounded-lg text-xs text-white">
+                        </div>
+                        <button onclick="calcStirrup()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded-xl text-[10px] cursor-pointer">طول سيخ الكانة</button>
+                        <div id="stirrupResult" class="text-[10px] font-semibold mt-2 bg-slate-950/40 p-2 rounded-lg text-emerald-300"></div>
+                    </div>
+
+                    <div class="premium-card p-4 rounded-2xl space-y-3">
+                        <h3 class="text-xs font-bold text-purple-400 border-b border-slate-800/60 pb-1.5">🛢️ تكعيب الأعمدة الدائرية</h3>
+                        <div class="grid grid-cols-2 gap-1">
+                            <div><label class="block text-[9px] text-slate-400 mb-0.5">قطر (م)</label><input type="number" id="circD" value="0.6" class="w-full bg-slate-950/60 border border-slate-800 p-1 rounded-lg text-xs text-white"></div>
+                            <div><label class="block text-[9px] text-slate-400 mb-0.5">ارتفاع (م)</label><input type="number" id="circH" value="3" class="w-full bg-slate-950/60 border border-slate-800 p-1 rounded-lg text-xs text-white"></div>
+                        </div>
+                        <button onclick="calcCircularVol()" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-2 mt-4 rounded-xl text-[10px] cursor-pointer">احسب الحجم</button>
+                        <div id="circResult" class="text-[10px] font-semibold mt-2 bg-slate-950/40 p-2 rounded-lg text-purple-300"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ai-inspector-suite" class="hidden bg-slate-900/80 p-6 rounded-3xl shadow-2xl border border-teal-900/40 space-y-4">
+                <div class="border-b border-slate-800 pb-2">
+                    <h2 class="text-md font-black text-teal-400 flex items-center gap-2">🤖 المساعد الهندسي ومحلل الصور الفوري (AI Vision)</h2>
+                    <p class="text-[11px] text-slate-400 mt-1">صور أي مشكلة أو خطأ حدادة من الموقع والذكاء الاصطناعي هيطلعلك التقرير والرد فورا!</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1">📸 لقطة المعاينة البصرية:</label>
+                            <input type="file" id="aiInspectorFile" accept="image/*" capture="environment" onchange="processAIPhoto(this)" class="w-full bg-slate-950 border border-slate-800 p-2 rounded-xl text-xs text-white">
+                            <div id="aiPreviewContainer" class="hidden mt-2 border border-slate-800 p-1.5 rounded-xl bg-slate-950 flex justify-center">
+                                <img id="aiPreviewImg" src="" class="max-h-36 object-contain rounded-lg">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1 flex justify-between items-center">
+                                <span>🗣️ سؤال الصنايعي أو وصفك للمشكلة:</span>
+                                <button type="button" onclick="startVoiceInput('aiInspectorQuery')" class="text-teal-400 text-md">🎤</button>
+                            </label>
+                            <textarea id="aiInspectorQuery" placeholder="المشكلة إيه يا هندسة؟" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white h-20"></textarea>
+                        </div>
+                        <button onclick="runLiveAIAnalysis()" class="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-lg">🚀 ابدأ الفحص الفني الذكي</button>
+                    </div>
+                    <div id="aiAnalysisOutputBox" class="bg-slate-950/70 p-4 rounded-2xl border border-slate-800 min-h-[260px] flex items-center justify-center text-xs text-slate-500">
+                        ارفع لقطة الميدان واكتب السؤال، وهيظهرلك التقرير الفني المتكامل..
+                    </div>
+                </div>
+            </section>
+
+            <section id="calc-suite" class="hidden bg-slate-900/80 p-6 rounded-3xl shadow-2xl border border-slate-800 space-y-6">
+                <div class="border-b border-slate-800 pb-3 flex justify-between items-center">
+                    <h2 class="text-md font-black text-amber-400 flex items-center gap-2 gold-glow">📐 حاسبة الخامات الذكية الشاملة</h2>
+                    <button onclick="printCalculationReport()" class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-slate-950 font-black px-4 py-2 rounded-xl text-xs shadow-lg transition-all cursor-pointer">🖨️ طباعة تقرير الحصر</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
+                    
+                    <div class="premium-card p-4 rounded-2xl space-y-2.5">
+                        <h3 class="text-xs font-bold text-blue-400 border-b border-slate-800/60 pb-1.5">🏗️ 1. خرسانات وهادر الصب</h3>
+                        <div class="grid grid-cols-3 gap-1">
+                            <div><label class="block text-[10px] text-slate-400 mb-0.5">طول(م)</label><input type="number" id="concL" value="12" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
+                            <div><label class="block text-[10px] text-slate-400 mb-0.5">عرض(م)</label><input type="number" id="concW" value="12" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
+                            <div><label class="block text-[10px] text-slate-400 mb-0.5">سمك(م)</label><input type="number" id="concH" value="0.2" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
+                        </div>
+                        <div><label class="block text-[10px] text-slate-400 font-bold mb-1">📉 الهادر (%) :</label><input type="number" id="concWaste" value="3" class="w-full bg-slate-950/60 border border-slate-800 p-2 rounded-lg text-xs text-amber-400 font-bold"></div>
+                        <select id="concMix" class="w-full bg-slate-950/60 border border-slate-800 p-2 rounded-lg text-xs text-white"><option value="350">مسلحة (350 كجم/م³)</option><option value="250">عادية (250 كجم/م³)</option></select>
+                        <button onclick="calcConcreteSuite()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded-xl text-xs cursor-pointer">احسب الخرسانة</button>
+                        <div id="concResult" class="text-[11px] font-semibold text-emerald-400 mt-2 space-y-1 bg-slate-950/40 p-2 rounded-lg"></div>
+                    </div>
+                    
+                    <div class="premium-card p-4 rounded-2xl space-y-2.5">
+                        <h3 class="text-xs font-bold text-slate-300 border-b border-slate-800/60 pb-1.5">⛓️ 2. حديد التسليح والقصيات</h3>
+                        <div class="grid grid-cols-2 gap-1">
+                            <div><label class="block text-[10px] text-slate-400 mb-0.5">قطر السيخ (مم)</label><input type="number" id="ironD" value="16" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
+                            <div><label class="block text-[10px] text-slate-400 mb-0.5">الأطوال (م)</label><input type="number" id="ironL" value="12" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
+                        </div>
+                        <div><label class="block text-[10px] text-slate-400 font-bold mb-1">📉 الهادر (%) :</label><input type="number" id="ironWaste" value="5" class="w-full bg-slate-950/60 border border-slate-800 p-2 rounded-lg text-xs text-amber-400 font-bold"></div>
+                        
+                        <div class="grid grid-cols-2 gap-1 mt-2 border-t border-slate-800/60 pt-2">
+                            <div><label class="block text-[9px] text-slate-400 mb-0.5">طول العمود(سم)</label><input type="number" id="ironColL" value="60" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
+                            <div><label class="block text-[9px] text-slate-400 mb-0.5">عرض العمود(سم)</label><input type="number" id="ironColW" value="30" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
+                        </div>
+
+                        <button onclick="calcIronSuite()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 rounded-xl text-xs cursor-pointer mt-1">احسب الحديد والكانات</button>
+                        <div id="ironResult" class="text-[11px] font-semibold text-emerald-400 mt-2 space-y-1 bg-slate-950/40 p-2 rounded-lg"></div>
+                    </div>
+                    
+                    <div class="premium-card p-4 rounded-2xl space-y-2.5">
+                        <h3 class="text-xs font-bold text-amber-500 border-b border-slate-800/60 pb-1.5">🧱 3. المباني وخصم الفتحات</h3>
+                        <div class="grid grid-cols-2 gap-1">
+                            <div><label class="block text-[10px] text-slate-400 mb-0.5">طول(م)</label><input type="number" id="bL" value="12" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
+                            <div><label class="block text-[10px] text-slate-400 mb-0.5">ارتفاع(م)</label><input type="number" id="bH" value="5" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-1">
+                            <div><label class="block text-[9px] text-slate-400 mb-0.5">خصم فتحات(م²):</label><input type="number" id="bOpenings" value="0" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
+                            <div><label class="block text-[9px] text-amber-400 font-bold mb-0.5">الهادر(%):</label><input type="number" id="bWaste" value="5" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-amber-400 font-bold"></div>
+                        </div>
+                        <select id="bType" class="w-full bg-slate-950/60 border border-slate-800 p-2 rounded-lg text-xs text-white"><option value="half">نصف طوبة (12 سم)</option><option value="full">طوبة كاملة (25 سم)</option></select>
+                        <button onclick="calcBricksSuite()" class="w-full bg-amber-500 text-slate-950 font-black py-2 rounded-xl text-xs cursor-pointer">احسب الطوب</button>
+                        <div id="brickResult" class="text-[11px] font-semibold text-emerald-400 mt-2 space-y-1 bg-slate-950/40 p-2 rounded-lg"></div>
+                    </div>
+                    
+                    <div class="premium-card p-4 rounded-2xl space-y-2">
+                        <h3 class="text-xs font-bold text-purple-400 border-b border-slate-800/60 pb-1.5">🎨 4. حاسبة التشطيبات</h3>
+                        <div><label class="block text-[10px] text-slate-400 mb-0.5">المساحة الإجمالية (م²)</label><input type="number" id="finishArea" value="120" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
+                        <div class="grid grid-cols-2 gap-1">
+                            <div><label class="block text-[9px] text-slate-400 mb-0.5">خصم فتحات(م²):</label><input type="number" id="finishOpenings" value="0" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-white"></div>
+                            <div><label class="block text-[9px] text-purple-400 font-bold mb-0.5">الهادر(%):</label><input type="number" id="finishWaste" value="7" class="w-full bg-slate-950/60 border border-slate-800 p-1.5 rounded-lg text-xs text-amber-400 font-bold"></div>
+                        </div>
+                        <select id="finishType" onchange="toggleFinishesSubInputs()" class="w-full bg-slate-950/60 border border-slate-800 p-2 rounded-lg text-xs text-white"><option value="tiles">أرضيات سيراميك</option><option value="plaster">بياض محارة</option><option value="paint">دهانات ونقاشة</option></select>
+                        <div id="tiles-sub-inputs" class="space-y-1 bg-slate-950/80 p-2 rounded-xl border border-slate-800">
+                            <div class="grid grid-cols-3 gap-1">
+                                <div><label class="block text-[8px] text-slate-400">طول بلاطة(سم)</label><input type="number" id="tileL" value="60" class="w-full bg-slate-900 border border-slate-700 p-1 rounded text-[10px] text-white"></div>
+                                <div><label class="block text-[8px] text-slate-400">عرض بلاطة(سم)</label><input type="number" id="tileW" value="60" class="w-full bg-slate-900 border border-slate-700 p-1 rounded text-[10px] text-white"></div>
+                                <div><label class="block text-[8px] text-slate-400">سمك مونة(سم)</label><input type="number" id="tileMorta" value="2" class="w-full bg-slate-900 border border-slate-700 p-1 rounded text-[10px] text-white"></div>
+                            </div>
+                        </div>
+                        <button onclick="calcFinishesSuite()" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-2 rounded-xl text-xs cursor-pointer transition-all">احسب التشطيبات</button>
+                        <div id="finishResult" class="text-[11px] font-semibold text-emerald-400 mt-1 space-y-1 bg-slate-950/40 p-2 rounded-lg"></div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+                <section class="bg-slate-900/40 p-5 rounded-3xl border border-slate-800/80">
+                    <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+                        <h2 class="text-md font-bold text-blue-400 flex items-center gap-2">🏗️ الأعمال الإنشائية الحالية</h2>
+                        <span class="bg-blue-950/50 text-blue-400 text-xs font-bold px-3 py-1 rounded-full border border-blue-900/60" id="structural-count">0 بنود</span>
+                    </div>
+                    <div id="structural-container" class="space-y-4"></div>
+                </section>
+                <section class="bg-slate-900/40 p-5 rounded-3xl border border-slate-800/80">
+                    <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+                        <h2 class="text-md font-bold text-amber-400 flex items-center gap-2">🎨 التشطيبات والمرافق</h2>
+                        <span class="bg-amber-950/50 text-amber-400 text-xs font-bold px-3 py-1 rounded-full border border-amber-900/60" id="architectural-count">0 بنود</span>
+                    </div>
+                    <div id="architectural-container" class="space-y-4"></div>
+                </section>
+            </div>
+        </main>
+
+        <div id="itemModal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center p-4 z-50 backdrop-blur-sm">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 max-w-md w-full shadow-2xl overflow-y-auto max-h-[90vh]">
+                <h3 class="text-md font-bold mb-4 text-white">تفعيل بند وتوثيق ميداني</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 mb-1">اختر البند الهندسي المعتمد</label>
+                        <select id="itemPresetKey" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 mb-1 flex justify-between items-center">
+                            <span>📍 الموقع / الزون بالتفصيل</span>
+                            <button type="button" onclick="startVoiceInput('itemLocation')" class="text-indigo-400 text-lg">🎤</button>
+                        </label>
+                        <input type="text" id="itemLocation" placeholder="مثال: الدور الأرضي - زون A" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-amber-400 mb-1">📅 تاريخ الاستلام الفعلي</label>
+                        <input type="date" id="itemDate" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white font-bold cursor-pointer">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 mb-1">الترتيب والأولوية</label>
+                        <select id="itemPriority" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white">
+                            <option value="high">🚨 أولوية قصوى (مسار حرج)</option>
+                            <option value="medium">⚡ أولوية متوسطة</option>
+                            <option value="low">☕ أولوية عادية</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 mb-1 flex justify-between items-center">
+                            <span>📝 ملاحظات وحالات عدم مطابقة</span>
+                            <button type="button" onclick="startVoiceInput('itemNotes')" class="text-amber-500 text-lg">🎤</button>
+                        </label>
+                        <textarea id="itemNotes" placeholder="اكتب أو سجل ملاحظاتك هنا..." class="w-full bg-slate-950 border border-slate-800 p-2 rounded-xl text-xs text-white h-16"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-blue-400 mb-1">📸 توثيق المعاينة البصرية</label>
+                        <input type="file" id="itemPhotoInput" accept="image/*" capture="environment" onchange="processCapturedPhoto(this)" class="w-full bg-slate-950 border border-slate-800 p-2 rounded-xl text-xs text-slate-400 file:bg-blue-600 file:border-0 file:px-3 file:py-1 file:rounded-lg file:text-white file:text-xs file:font-bold file:ml-2 cursor-pointer">
+                        <input type="hidden" id="itemPhotoBase64">
+                        <div id="photoPreviewContainer" class="hidden mt-2 border border-slate-800 p-1.5 rounded-xl bg-slate-950 flex justify-center"><img id="photoPreviewImg" src="" class="max-h-32 object-contain rounded-lg"></div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-emerald-400 mb-1">🎨 سكتش فني يدوي (للتوضيح)</label>
+                        <canvas id="sketchPad" class="sketch-canvas w-full"></canvas>
+                        <div class="flex gap-2 mt-2">
+                            <button type="button" onclick="clearSketch()" class="flex-1 bg-slate-800 text-slate-300 py-1.5 rounded-lg text-xs font-bold hover:bg-slate-700">مسح اللوحة</button>
+                            <button type="button" onclick="saveSketchToInput()" class="flex-1 bg-emerald-600 text-white py-1.5 rounded-lg text-xs font-bold hover:bg-emerald-500">اعتماد السكتش</button>
+                        </div>
+                        <input type="hidden" id="itemSketchBase64">
+                    </div>
+                </div>
+                <div class="flex gap-2 mt-6">
+                    <button onclick="saveItem()" class="flex-1 bg-blue-600 text-white py-2.5 rounded-xl text-xs font-bold cursor-pointer hover:bg-blue-500">حفظ وتفعيل في السحاب</button>
+                    <button onclick="closeModal()" class="flex-1 bg-slate-800 text-slate-300 py-2.5 rounded-xl text-xs font-bold cursor-pointer hover:bg-slate-700">إلغاء</button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center py-8 text-slate-700 text-xs mt-12 border-t border-slate-900">
+            <p class="font-semibold tracking-wider text-slate-400">AZ Developments | م/ عبدالرحمن محمد زهير © 2026</p>
+        </footer>
+    </div>
+
+    <div id="print-zone" class="hidden print-page text-black p-6 bg-white" dir="rtl">
+        <div class="text-center border-b-2 border-black pb-4 mb-6">
+            <h1 class="text-2xl font-bold">تقرير الاستلام والمعاينة اليومي للموقع</h1>
+            <p class="text-md font-semibold mt-1">AZ Developments</p>
+            <div class="text-xs text-gray-700 mt-1 flex justify-center gap-4" style="direction: rtl;">
+                <span style="direction: ltr; display: inline-block;">الهاتف: <span style="unicode-bidi: isolate; text-align: left;">+20 109 103 2335</span></span>
+                <span>الإيميل: Abdulrahmanzoher@gmail.com</span>
+                <span>وقت الطباعة: <span id="print-date"></span></span>
+            </div>
+        </div>
+        <table class="w-full border-collapse border border-black text-xs">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border border-black p-2 text-right">البند</th>
+                    <th class="border border-black p-2 text-right">الموقع</th>
+                    <th class="border border-black p-2 text-center w-20">التصنيف</th>
+                    <th class="border border-black p-2 text-right w-1/3">الملاحظات والفحوصات المعتمدة</th>
+                    <th class="border border-black p-2 text-center w-24">مرفقات (الصور)</th>
+                    <th class="border border-black p-2 text-center w-20">توقيع مهندس الاستلام</th>
+                </tr>
+            </thead>
+            <tbody id="print-table-body"></tbody>
+        </table>
+    </div>
+
+    <div id="print-calc-zone" class="hidden print-page text-black p-6 bg-white" dir="rtl">
+        <div class="text-center border-b-2 border-black pb-4 mb-6">
+            <h1 class="text-2xl font-bold">تقرير حصر المواد والكميات الهندسي</h1>
+            <p class="text-md font-semibold mt-1">م/ عبدالرحمن محمد زهير (AZ)</p>
+        </div>
+        <table class="w-full border-collapse border border-black text-xs">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border border-black p-2 text-right w-1/5">البند</th>
+                    <th class="border border-black p-2 text-right w-1/4">المواصفات</th>
+                    <th class="border border-black p-2 text-center w-24">الصافي</th>
+                    <th class="border border-black p-2 text-center w-24">مع الهادر</th>
+                    <th class="border border-black p-2 text-right w-1/3">الخامات الموصى بتوريدها</th>
+                </tr>
+            </thead>
+            <tbody id="print-calc-table-body"></tbody>
+        </table>
+    </div>
+
+    <script>
+        // إعداد المتغيرات الشاملة (Global Scope)
+        window.presetItemsBank = {
+            "str_1": { title: "أعمال الحفر وتطهير قاع الموقع", category: "structural", sortOrder: 10, checks: ["مطابقة الأبعاد والحدود للمخططات المساحية", "الوصول لمنسوب التأسيس المطلوب"] },
+            "str_4_wood": { title: "نجارة القواعد المسلحة واللبشة", category: "structural", sortOrder: 40, checks: ["مراجعة الأبعاد الهندسية والتربيع العام للقواعد والأحط", "تقوية الأخشاب والشكالات"] },
+            "str_4_iron": { title: "حدادة القواعد المسلحة واللبشة", category: "structural", sortOrder: 50, checks: ["مطابقة توزيع حديد الفرش والغطاء والدرج للوحات المسلحة", "تركيب البسكويت لضمان الكفر الخرساني"] },
+            "str_cast_found": { title: "صب خرسانة القواعد واللبشة", category: "structural", sortOrder: 60, checks: ["مراجعة دك التربة ورش المياه", "التأكد من الهزاز الميكانيكي", "أخذ مكعبات الخرسانة للاختبار"] },
+            "str_7_wood": { title: "نجارة أعمدة الدور", category: "structural", sortOrder: 90, checks: ["استلام شواكيل وزنات الأعمدة رأسياً بميزان الزنبة"] },
+            "str_7_iron": { title: "حدادة أعمدة الدور", category: "structural", sortOrder: 100, checks: ["مراجعة عدد وأقطار الأسياخ ومكان أطوال الوصلات", "تكثيف الكانات في المتر السفلي والعلوي للعمود"] },
+            "str_cast_col": { title: "صب خرسانة الأعمدة", category: "structural", sortOrder: 105, checks: ["مراجعة الوزنات الرأسية أثناء الصب", "تقوية الأحزمة", "استخدام الهزاز الميكانيكي بشكل صحيح", "أخذ مكعبات الاختبار"] },
+            "str_8_wood": { title: "نجارة الأسقف (Solid / Flat)", category: "structural", sortOrder: 110, checks: ["مراجعة مناسيب الشدة الخشبية بميزان القامة", "مراجعة تقوية الجاكات والعروق لمنع الانهيار الأفقي"] },
+            "str_8_iron": { title: "حدادة الأسقف (Solid / Flat)", category: "structural", sortOrder: 120, checks: ["استلام حديد الرقة السفلية والعلوية والكبوب والكراسي", "تأكيد وتثبيت حديد الفرش والغطاء والبرانيط الإضافية"] },
+            "str_cast_slab": { title: "صب خرسانة الأسقف", category: "structural", sortOrder: 125, checks: ["التأكد من الغطاء الخرساني (البسكويت)", "تنظيف السقف ورشه بالمياه قبل الصب", "استخدام الهزاز", "تسوية السطح (الفرمة)"] },
+            "arch_1": { title: "أعمال مباني الحوائط والقواطيع", category: "architectural", sortOrder: 130, checks: ["استلام لقطة مدماك القد والأكاسات للغرف والتربيع", "مراجعة رأسية الحوائط بميزان الخيط واستواء العراميس"] },
+            "arch_5": { title: "أعمال بؤج وأوتار المحارة (اللياسة الداخلي)", category: "architectural", sortOrder: 170, checks: ["تركيب سلك الشبك الفايبر بين الخرسانة والطوب", "عمل البؤج والتربيع لضمان زوايا 90 قائمة تماماً"] },
+            "arch_8": { title: "أعمال تركيب الأرضيات (سيراميك / بورسلين)", category: "architectural", sortOrder: 200, checks: ["تحديد منسوب التشطيب العام بناء على الشرب الرئيسي", "مراجعة استواء وميول السيراميك باتجاه بيبات الصرف"] }
+        };
+
+        window.allItemsFetchedCached = [];
+        window.latestCalculations = { concrete: null, iron: null, bricks: null, finishes: null };
+        window.confirmCallback = null;
+        window.currentAIReport = null;
+
+        // دوال الإشعارات والـ UI
+        window.showNotification = (msg, type = 'info') => {
+            const notif = document.getElementById('custom-notification');
+            notif.innerText = msg;
+            notif.className = type === 'error' ? "fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] transition-all duration-300 bg-red-600 text-white px-6 py-3 rounded-xl shadow-2xl border border-red-500 font-bold text-sm text-center min-w-[300px] translate-y-0 opacity-100" : "fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] transition-all duration-300 bg-emerald-600 text-white px-6 py-3 rounded-xl shadow-2xl border border-emerald-500 font-bold text-sm text-center min-w-[300px] translate-y-0 opacity-100";
+            setTimeout(() => { notif.className = "fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] transition-all duration-300 -translate-y-24 opacity-0 bg-slate-800 text-white px-6 py-3 rounded-xl shadow-2xl border border-slate-700 font-bold text-sm text-center min-w-[300px]"; }, 3000);
+        };
+        window.showConfirm = (msg, callback) => { document.getElementById('confirm-message').innerText = msg; window.confirmCallback = callback; document.getElementById('custom-confirm').classList.remove('hidden'); };
+        window.closeConfirm = () => { document.getElementById('custom-confirm').classList.add('hidden'); window.confirmCallback = null; };
+        document.getElementById('confirm-yes').addEventListener('click', () => { if(window.confirmCallback) window.confirmCallback(); window.closeConfirm(); });
+
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+        window.playUiSound = (type) => {
+            if(!audioCtx) audioCtx = new AudioContext(); if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.connect(gain); gain.connect(audioCtx.destination);
+            if (type === 'click') { osc.frequency.setValueAtTime(600, audioCtx.currentTime); gain.gain.setValueAtTime(0.05, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + 0.04); }
+            else if (type === 'success') { osc.type = 'triangle'; osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.08); gain.gain.setValueAtTime(0.1, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + 0.25); }
+        };
+
+        window.changeAppTheme = (theme) => { window.playUiSound('click'); const body = document.getElementById('mainBody'); body.className = theme === 'day' ? "theme-light min-h-screen p-3 md:p-8 selection:bg-amber-500 selection:text-slate-950" : "theme-dark min-h-screen p-3 md:p-8 selection:bg-amber-500 selection:text-slate-950"; };
+        window.toggleSection = (id) => { window.playUiSound('click'); const sec = document.getElementById(id); if(id === 'ar-hud-suite') { if(sec.classList.contains('hidden')) { sec.classList.remove('hidden'); window.startARCamera(); } else { window.stopARCamera(); } } else { sec.classList.toggle('hidden'); } };
+
+        window.populatePresets = () => {
+            const selectPreset = document.getElementById('itemPresetKey');
+            selectPreset.innerHTML = "";
+            const sortedGuideKeys = Object.keys(window.presetItemsBank).sort((a, b) => window.presetItemsBank[a].sortOrder - window.presetItemsBank[b].sortOrder);
+            sortedGuideKeys.forEach(key => { const i = window.presetItemsBank[key]; const opt = document.createElement('option'); opt.value = key; opt.innerText = `${i.category==='structural'?'🏗️':'🎨'} ${i.title}`; selectPreset.appendChild(opt); });
+        };
+
+        window.openModal = () => { window.playUiSound('click'); window.populatePresets(); document.getElementById('itemDate').value = new Date().toISOString().split('T')[0]; document.getElementById('itemLocation').value = ''; document.getElementById('itemNotes').value = ''; document.getElementById('itemPhotoInput').value = ''; document.getElementById('itemPhotoBase64').value = ''; document.getElementById('photoPreviewContainer').classList.add('hidden'); window.clearSketch(); document.getElementById('itemModal').classList.remove('hidden'); setTimeout(() => { const canvas = document.getElementById('sketchPad'); canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; }, 60); };
+        window.closeModal = () => { window.playUiSound('click'); document.getElementById('itemModal').classList.add('hidden'); };
+
+        // AR & Voice
+        let arStream = null; window.stopARCamera = () => { window.playUiSound('click'); const video = document.getElementById('arVideoElement'); if(arStream) { arStream.getTracks().forEach(t => t.stop()); video.srcObject = null; arStream = null; } document.getElementById('ar-hud-suite').classList.add('hidden'); }; window.startARCamera = async () => { const video = document.getElementById('arVideoElement'); try { arStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }); video.srcObject = arStream; } catch (err) { window.showNotification("لم يتم العثور على كاميرا أو رفضت الصلاحية.", "error"); document.getElementById('ar-hud-suite').classList.add('hidden'); } }; window.startVoiceInput = (targetId) => { window.playUiSound('click'); const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition; if (!SpeechRecognition) return window.showNotification("المتصفح لا يدعم الإدخال الصوتي.", "error"); const rec = new SpeechRecognition(); rec.lang = 'ar-EG'; const inputField = document.getElementById(targetId); const oldPlaceholder = inputField.placeholder; inputField.placeholder = "جاري الاستماع.. اتكلم 🎤"; rec.onresult = (e) => { inputField.value += (inputField.value ? " " : "") + e.results[0][0].transcript; }; rec.onend = () => { inputField.placeholder = oldPlaceholder; }; rec.start(); };
+
+        // لوحة السكتش والرسم اليدوي وتحويله لـ JPEG المضغوط بذكاء
+        const canvas = document.getElementById('sketchPad'); const ctx = canvas.getContext('2d'); let isDrawing = false;
+        const startDraw = (e) => { isDrawing = true; draw(e); }; const endDraw = () => { isDrawing = false; ctx.beginPath(); };
+        canvas.addEventListener('mousedown', startDraw); canvas.addEventListener('mouseup', endDraw); canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('touchstart', (e) => { const t = e.touches[0]; canvas.dispatchEvent(new MouseEvent("mousedown", { clientX: t.clientX, clientY: t.clientY })); }, { passive: false }); canvas.addEventListener('touchend', () => canvas.dispatchEvent(new MouseEvent("mouseup")), { passive: false }); canvas.addEventListener('touchmove', (e) => { e.preventDefault(); const t = e.touches[0]; canvas.dispatchEvent(new MouseEvent("mousemove", { clientX: t.clientX, clientY: t.clientY })); }, { passive: false });
+        function draw(e) { if (!isDrawing) return; const r = canvas.getBoundingClientRect(); const clientX = e.clientX || (e.touches && e.touches[0].clientX); const clientY = e.clientY || (e.touches && e.touches[0].clientY); const x = (clientX - r.left) * (canvas.width / r.width); const y = (clientY - r.top) * (canvas.height / r.height); ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = '#0f172a'; ctx.lineTo(x, y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x, y); }
+        window.clearSketch = () => { window.playUiSound('click'); ctx.clearRect(0, 0, canvas.width, canvas.height); document.getElementById('itemSketchBase64').value = ''; };
+        
+        window.saveSketchToInput = () => {
+            window.playUiSound('success');
+            // عمل كود لدمج خلفية بيضاء لتجهيز الصورة للـ JPEG لتقليل الحجم
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = canvas.width; tempCanvas.height = canvas.height;
+            const tCtx = tempCanvas.getContext('2d');
+            tCtx.fillStyle = '#ffffff'; tCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+            tCtx.drawImage(canvas, 0, 0);
+            
+            document.getElementById('itemSketchBase64').value = tempCanvas.toDataURL('image/jpeg', 0.6); // ضغط 60%
+            window.showNotification("تم اعتماد السكتش!", "success");
+        };
+
+        window.processCapturedPhoto = (input) => { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function (e) { const img = new Image(); img.onload = function() { const c = document.createElement('canvas'); const ct = c.getContext('2d'); c.width = 600; c.height = img.height * (600 / img.width); ct.drawImage(img, 0, 0, c.width, c.height); const base64 = c.toDataURL('image/jpeg', 0.6); const targetInput = input.id === 'aiInspectorFile' ? 'aiPreviewImg' : 'photoPreviewImg'; const targetContainer = input.id === 'aiInspectorFile' ? 'aiPreviewContainer' : 'photoPreviewContainer'; const targetBase64 = input.id === 'aiInspectorFile' ? null : 'itemPhotoBase64'; document.getElementById(targetInput).src = base64; document.getElementById(targetContainer).classList.remove('hidden'); if(targetBase64) document.getElementById(targetBase64).value = base64; }; img.src = e.target.result; }; reader.readAsDataURL(file); };
+        window.processAIPhoto = window.processCapturedPhoto; 
+
+        // 🤖 المساعد الهندسي الذكي (Gemini AI API)
+        window.runLiveAIAnalysis = async () => {
+            window.playUiSound('click');
+            const q = document.getElementById('aiInspectorQuery').value;
+            const outBox = document.getElementById('aiAnalysisOutputBox');
+            if(!q) return window.showNotification("اكتب الموقف أو السؤال أولاً يا هندسة!", "error");
+            
+            outBox.innerHTML = `<div class="text-teal-400 font-bold animate-pulse text-center mt-8">⏳ جاري استشارة الذكاء الاصطناعي...</div>`;
+            
+            try {
+                // ⚠️ هام جداً: ضع مفتاح الـ API الخاص بك هنا 
+                const API_KEY = "YOUR_GEMINI_API_KEY_HERE";
+                
+                if(API_KEY === "YOUR_GEMINI_API_KEY_HERE") {
+                    outBox.innerHTML = `<div class="bg-rose-950 border border-rose-800 p-4 rounded-xl text-rose-400 text-xs text-center leading-relaxed">⚠️ النظام الذكي معطل مؤقتاً.<br>يا هندسة لازم تضيف مفتاح (API Key) الخاص بيك من Google AI Studio في الكود عشان الذكاء الاصطناعي يشتغل بجد!</div>`;
+                    return;
+                }
+
+                const prompt = `أنت استشاري هندسة مدنية في مصر. سأطرح عليك مشكلة من الموقع، أرجو أن تحللها باختصار شديد جداً ومباشر.
+المشكلة: "${q}"
+يجب أن يكون ردك مقسم لثلاثة أقسام تفصل بينها علامة | كالتالي بالضبط وبدون أي كلام إضافي:
+التشخيص الهندسي للمشكلة | الإجراء الصحيح المعتمد الذي يجب تنفيذه | جملة واحدة بالعامية المصرية تقولها للمقاول أو الصنايعي ليلتزم بالحل`;
+
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.2, maxOutputTokens: 250 } })
+                });
+
+                if(!response.ok) throw new Error('API Request Failed');
+                const data = await response.json(); const aiText = data.candidates[0].content.parts[0].text;
+                
+                const parts = aiText.split('|').map(p => p.trim());
+                const problemDesc = parts[0] || "تحليل المشكلة غير متوفر."; const actionDesc = parts[1] || aiText; const workerTalk = parts[2] || "نفذ الشغل المطابق للكود يا ريس.";
+
+                window.currentAIReport = { action: actionDesc };
+                window.playUiSound('success');
+                outBox.innerHTML = `
+                    <div class="w-full space-y-3 text-right">
+                        <div class="bg-slate-900 border-r-4 border-teal-500 p-2.5 rounded-xl"><span class="text-teal-400 text-[11px] font-bold">🔍 التشخيص الهندسي:</span><p class="text-[11px] text-slate-300 mt-1">${problemDesc}</p></div>
+                        <div class="bg-slate-900 border-r-4 border-amber-500 p-2.5 rounded-xl"><span class="text-amber-400 text-[11px] font-bold">🛠️ الإجراء المطلوب:</span><p class="text-[11px] text-slate-300 mt-1">${actionDesc}</p></div>
+                        <div class="bg-slate-900 border-r-4 border-emerald-500 p-2.5 rounded-xl"><span class="text-emerald-400 text-[11px] font-bold">🗣️ الرد للصنايعي:</span><p class="text-[12px] text-emerald-300 font-semibold mt-1">"${workerTalk}"</p></div>
+                        <button onclick="shareAIReportToWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-500 transition-colors text-white py-2 rounded-lg text-[11px] font-bold shadow-lg mt-2">🟢 إرسال التقرير واتساب للشركة</button>
+                    </div>`;
+            } catch (error) { console.error(error); outBox.innerHTML = `<div class="bg-rose-950 border border-rose-800 p-3 rounded-xl text-rose-400 text-xs text-center">❌ حدث خطأ في الاتصال بالسيرفر الذكي. يرجى مراجعة الاتصال بالإنترنت أو مفتاح الـ API.</div>`; }
+        };
+
+        window.shareAIReportToWhatsApp = () => { window.playUiSound('click'); const q = document.getElementById('aiInspectorQuery').value; const report = window.currentAIReport || { action: "مطلوب مراجعة المهندس المسؤول." }; const text = `*تقرير جودة وفحص ميداني*\n*المهندس المسؤول:* م/ عبدالرحمن محمد زهير (AZ)\n*المشكلة المرصودة:* ${q}\n*الإجراء المعتمد للحل:* ${report.action}`; window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank'); };
+
+        // حاسبات الموقع الفورية
+        window.calcLd = () => { window.playUiSound('click'); const d = parseFloat(document.getElementById('ldDia').value)||0; document.getElementById('ldResult').innerHTML = `<p>• الشد (60Φ): <span class="text-indigo-400 font-bold">${Math.ceil(d*6)} سم</span></p><p>• الضغط (40Φ): <span class="text-amber-400 font-bold">${Math.ceil(d*4)} سم</span></p>`; }; window.calcQuickWeight = () => { window.playUiSound('click'); const d = parseFloat(document.getElementById('weightDia').value)||0; const w = (d*d)/162; document.getElementById('quickWeightResult').innerHTML = `<p>• وزن المتر: <span class="text-amber-400 font-bold">${w.toFixed(3)} كجم/م</span></p><p>• السيخ الكامل: <span class="text-amber-400 font-bold">${(w*12).toFixed(2)} كجم</span></p><p>• عدد بـ الطن: <span class="text-emerald-400 font-bold">${Math.floor(1000/(w*12))} سيخ</span></p>`; }; window.calcStirrup = () => { window.playUiSound('click'); const l=parseFloat(document.getElementById('colL').value)||0, w=parseFloat(document.getElementById('colW').value)||0, c=parseFloat(document.getElementById('colCover').value)||0; const total = (2*((l-2*c)+(w-2*c)))+(16); document.getElementById('stirrupResult').innerHTML = `<p class="text-amber-400 font-bold">• طول قص الكانة: ${total.toFixed(1)} سم</p>`; }; window.calcCircularVol = () => { window.playUiSound('click'); const d=parseFloat(document.getElementById('circD').value)||0, h=parseFloat(document.getElementById('circH').value)||0; document.getElementById('circResult').innerHTML = `<p class="text-purple-400 font-bold">• التكعيب: ${(Math.PI*(d/2)*(d/2)*h).toFixed(3)} م³</p>`; };
+        window.calcConcreteSuite = () => { window.playUiSound('click'); const l=parseFloat(document.getElementById('concL').value)||0, w=parseFloat(document.getElementById('concW').value)||0, h=parseFloat(document.getElementById('concH').value)||0; const wf = 1 + (parseFloat(document.getElementById('concWaste').value)||0)/100, mix = parseInt(document.getElementById('concMix').value); const nv=l*w*h, gv=nv*wf, tons=(gv*mix)/1000; window.latestCalculations.concrete = { l, w, h, wasteFactor:wf, mix, netVolume:nv, grossVolume:gv, gravel:gv*0.8, sand:gv*0.4, cementTons:tons, cementBags:Math.ceil((tons*1000)/50), waterLiters:gv*175 }; document.getElementById('concResult').innerHTML = `<p>الصافي: ${nv.toFixed(3)} م³</p><p class="text-amber-400">التوريد: ${gv.toFixed(3)} م³</p><p>أسمنت: ${tons.toFixed(2)} طن</p>`; }; window.calcIronSuite = () => { window.playUiSound('click'); const d=parseFloat(document.getElementById('ironD').value)||0, l=parseFloat(document.getElementById('ironL').value)||0; const wf=1+(parseFloat(document.getElementById('ironWaste').value)||0)/100; const nw = ((d*d)/162)*l, gw = nw*wf; const colL=parseFloat(document.getElementById('ironColL').value)||0; const colW=parseFloat(document.getElementById('ironColW').value)||0; const cover = 2.5; const stirrupL = colL && colW ? (2 * ((colL - 2*cover) + (colW - 2*cover))) + 16 : 0; window.latestCalculations.iron = { d, l, wasteFactor:wf, netWeight:nw, grossWeight:gw, stirrupL }; let resHtml = `<p>الصافي: ${nw.toFixed(2)} كجم | التوريد: <span class="text-amber-400">${gw.toFixed(2)} كجم</span></p>`; if (stirrupL > 0) { resHtml += `<p class="text-emerald-400 mt-1 font-bold">• طول الكانة: ${stirrupL.toFixed(1)} سم</p>`; } document.getElementById('ironResult').innerHTML = resHtml; }; window.calcBricksSuite = () => { window.playUiSound('click'); const l=parseFloat(document.getElementById('bL').value)||0, h=parseFloat(document.getElementById('bH').value)||0, op=parseFloat(document.getElementById('bOpenings').value)||0, wf=1+(parseFloat(document.getElementById('bWaste').value)||0)/100; const type=document.getElementById('bType').value, na=(l*h)-op, gb=(na*(type==='half'?55:110))*wf; window.latestCalculations.bricks = { l, h, openings:op, wasteFactor:wf, type, netArea:na, grossBricks:gb, totalCementBags:((na*(type==='half'?0.01:0.022))*1000/50)*wf, totalSandCubic:(na*(type==='half'?0.025:0.05))*wf }; document.getElementById('brickResult').innerHTML = `<p class="text-amber-400">الطوب: ${Math.ceil(gb)} طوبة</p>`; }; window.calcFinishesSuite = () => { window.playUiSound('click'); const area = parseFloat(document.getElementById('finishArea').value) || 0; const openings = parseFloat(document.getElementById('finishOpenings').value) || 0; const waste = 1 + (parseFloat(document.getElementById('finishWaste').value) || 0) / 100; const type = document.getElementById('finishType').value; const netArea = (area - openings) * waste; let res = ""; let typeLabel = ""; if (type === 'tiles') { typeLabel = "أرضيات سيراميك"; const tL = parseFloat(document.getElementById('tileL').value) || 60; const tW = parseFloat(document.getElementById('tileW').value) || 60; const tileArea = (tL / 100) * (tW / 100); const tilesCount = Math.ceil(netArea / tileArea); res = `<p>• سيراميك مقدر: ${Math.ceil(netArea)} م²</p><p class="text-amber-400">• العدد: ${tilesCount} بلاطة تقريباً</p>`; } else if (type === 'plaster') { typeLabel = "بياض محارة"; res = `<p>• مساحة المحارة: ${Math.ceil(netArea)} م²</p><p class="text-amber-400">• مونة (تقريبي): ${(netArea * 0.015).toFixed(2)} م³</p>`; } else { typeLabel = "دهانات ونقاشة"; res = `<p>• مساحة الدهان: ${Math.ceil(netArea)} م²</p><p class="text-amber-400">• بستلات: ${Math.ceil(netArea / 30)} (وجهين)</p>`; } window.latestCalculations.finishes = { type: typeLabel, netArea, resultText: res }; document.getElementById('finishResult').innerHTML = res; }; window.toggleFinishesSubInputs = () => { document.getElementById('tiles-sub-inputs').classList.toggle('hidden', document.getElementById('finishType').value !== 'tiles'); };
+
+        // 🖨️ طباعة التقارير بالتحسينات الشاملة (صور مصغرة + أوقات + فحوصات معتمدة)
+        window.printInspectionReport = () => {
+            window.playUiSound('click');
+            const tbody = document.getElementById('print-table-body');
+            tbody.innerHTML = '';
+            
+            if(window.allItemsFetchedCached.length === 0) {
+                window.showNotification("لا توجد بنود مطروحة للطباعة", "error");
+                return;
+            }
+
+            window.allItemsFetchedCached.forEach(docData => {
+                const item = docData.data;
+                const isStructural = item.category === 'structural';
+                
+                // جلب المرفقات والصور وعرضها بشكل مصغر ومربع
+                let attachmentsHtml = '';
+                if(item.photoUrl) attachmentsHtml += `<img src="${item.photoUrl}" class="print-img">`;
+                if(item.sketchUrl) attachmentsHtml += `<img src="${item.sketchUrl}" class="print-img">`;
+                if(!attachmentsHtml) attachmentsHtml = '<span style="color:#666; font-size:10px;">لا توجد مرفقات</span>';
+
+                // جلب نقاط الفحص التي تم تعليمها بـ (صح) لطباعتها
+                let checkedHtml = '';
+                if(item.checks && item.checkedStates) {
+                    item.checks.forEach((check, idx) => {
+                        if(item.checkedStates[idx] === true) {
+                            checkedHtml += `<div class="check-list-print">✔️ تم مراجعة: ${check}</div>`;
+                        }
+                    });
+                }
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="border border-black p-2 text-right font-bold" style="vertical-align: top;">${item.title}</td>
+                        <td class="border border-black p-2 text-right" style="vertical-align: top;">${item.location}</td>
+                        <td class="border border-black p-2 text-center" style="vertical-align: top;">${isStructural ? 'إنشائي' : 'معماري'}</td>
+                        <td class="border border-black p-2 text-right" style="vertical-align: top;">
+                            <div style="margin-bottom: 6px;">${item.notes || 'لا توجد ملاحظات إضافية.'}</div>
+                            ${checkedHtml}
+                        </td>
+                        <td class="border border-black p-2 text-center" style="vertical-align: middle;">
+                            ${attachmentsHtml}
+                        </td>
+                        <td class="border border-black p-2 text-center" style="vertical-align: bottom; height: 60px;">
+                            <br><br>.....................
+                        </td>
+                    </tr>
+                `;
+            });
+
+            // تذييل الصفحة
+            tbody.innerHTML += `<tr><td colspan="6" class="border-0 p-8 pt-12"><div style="display: flex; justify-content: space-around; text-align: center; font-weight: bold; font-size: 14px;"><div>المهندس المسؤول والمشرف العام<br>م/ عبدالرحمن محمد زهير (AZ)</div><div>الاستشاري / المشرف المستلم<br>..................................</div></div></td></tr>`;
+            
+            // تاريخ ووقت الطباعة الدقيق
+            const now = new Date();
+            const dateString = now.toLocaleDateString('ar-EG');
+            const timeString = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('print-date').innerText = `${dateString} - ${timeString}`;
+            
+            document.getElementById('print-zone').classList.remove('hidden'); document.getElementById('print-calc-zone').classList.add('hidden');
+            window.print(); document.getElementById('print-zone').classList.add('hidden');
+        };
+
+        window.printCalculationReport = () => { window.playUiSound('click'); const tbody = document.getElementById('print-calc-table-body'); tbody.innerHTML = ''; const c = window.latestCalculations.concrete; if(c) tbody.innerHTML += `<tr><td class="border border-black p-2 text-right">خرسانة</td><td class="border border-black p-2 text-right">محتوى ${c.mix} كجم/م³</td><td class="border border-black p-2 text-center">${c.netVolume.toFixed(2)} م³</td><td class="border border-black p-2 text-center">${c.grossVolume.toFixed(2)} م³</td><td class="border border-black p-2 text-right">أسمنت: ${c.cementTons.toFixed(2)} طن</td></tr>`; const i = window.latestCalculations.iron; if(i) tbody.innerHTML += `<tr><td class="border border-black p-2 text-right">حديد تسليح</td><td class="border border-black p-2 text-right">قطر ${i.d} مم</td><td class="border border-black p-2 text-center">${i.netWeight.toFixed(2)} كجم</td><td class="border border-black p-2 text-center">${i.grossWeight.toFixed(2)} كجم</td><td class="border border-black p-2 text-right">طول الكانة للعمود: ${i.stirrupL ? i.stirrupL.toFixed(1) : '-'} سم</td></tr>`; const b = window.latestCalculations.bricks; if(b) tbody.innerHTML += `<tr><td class="border border-black p-2 text-right">مباني</td><td class="border border-black p-2 text-right">${b.type==='half'?'نصف طوبة (12 سم)':'طوبة كاملة (25 سم)'}</td><td class="border border-black p-2 text-center">${b.netArea.toFixed(2)} م²</td><td class="border border-black p-2 text-center">-</td><td class="border border-black p-2 text-right">${Math.ceil(b.grossBricks)} طوبة تقريباً</td></tr>`; const f = window.latestCalculations.finishes; if(f) tbody.innerHTML += `<tr><td class="border border-black p-2 text-right">تشطيبات</td><td class="border border-black p-2 text-right">${f.type}</td><td class="border border-black p-2 text-center">${f.netArea.toFixed(2)} م²</td><td class="border border-black p-2 text-center">-</td><td class="border border-black p-2 text-right">${f.resultText.replace(/<[^>]*>?/gm, ' ')}</td></tr>`; if(!c && !i && !b && !f) { window.showNotification("قم بإجراء حسابات أولاً لطباعتها!", "error"); return; } tbody.innerHTML += `<tr><td colspan="5" class="border-0 p-8 pt-12"><div style="display: flex; justify-content: space-around; text-align: center; font-weight: bold; font-size: 14px;"><div>مهندس الحصر والتسعير<br>م/ عبدالرحمن محمد زهير (AZ)</div><div>الاعتماد والمراجعة الفنية<br>..................................</div></div></td></tr>`; document.getElementById('print-zone').classList.add('hidden'); document.getElementById('print-calc-zone').classList.remove('hidden'); window.print(); document.getElementById('print-calc-zone').classList.add('hidden'); };
+
+        window.saveItem = () => window.showNotification("جاري تهيئة منظومة الرفع الاحتياطي الميداني...", "error"); window.deleteItem = () => window.showNotification("جاري تهيئة منظومة الرفع الاحتياطي الميداني...", "error"); window.updateCheckStatus = () => {}; window.onload = () => { window.populatePresets(); };
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { initializeFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc, updateDoc, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        try {
+            const firebaseConfig = { apiKey: "AIzaSyA46eLZxm4GbRVwMjGH5I5tXvrbMmQxqwk", authDomain: "site-inspection-app-eb4b2.firebaseapp.com", projectId: "site-inspection-app-eb4b2", storageBucket: "site-inspection-app-eb4b2.firebasestorage.app", messagingSenderId: "661739467144", appId: "1:661739467144:web:952c493f49a21a70921f67" };
+            const app = initializeApp(firebaseConfig);
+            const db = initializeFirestore(app, {});
+
+            enableIndexedDbPersistence(db).catch((err) => {
+                if (err.code == 'failed-precondition') console.warn("التخزين المحلي نشط في علامة تبويب أخرى فقط.");
+                else if (err.code == 'unimplemented') console.warn("هذا المتصفح لا يدعم التشغيل أوفلاين.");
+            });
+
+            const statusBadge = document.getElementById('networkStatusBadge');
+            const updateNetworkHUD = () => {
+                if (navigator.onLine) { statusBadge.className = "inline-flex items-center gap-1 bg-emerald-950 text-emerald-400 border border-emerald-800 rounded-lg px-2 py-0.5 text-[10px] font-bold justify-center"; statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> متصل بالشبكة`; } 
+                else { statusBadge.className = "inline-flex items-center gap-1 bg-rose-950 text-rose-400 border border-rose-800 rounded-lg px-2 py-0.5 text-[10px] font-bold justify-center animate-bounce"; statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span> أوفلاين (حفظ محلي)`; }
+            };
+            window.addEventListener('online', updateNetworkHUD); window.addEventListener('offline', updateNetworkHUD); updateNetworkHUD();
+
+            window.deleteItem = (id) => {
+                window.playUiSound('click');
+                window.showConfirm("تأكيد مسح هذا البند نهائياً؟", async () => {
+                    await deleteDoc(doc(db, "inspection_items", id)); window.showNotification("تم الحذف بنجاح", "success");
+                });
+            };
+
+            window.updateCheckStatus = async (itemId, checkIndex, isChecked) => {
+                window.playUiSound('click');
+                const itemRef = doc(db, "inspection_items", itemId);
+                const targetedItem = window.allItemsFetchedCached.find(i => i.id === itemId);
+                if(targetedItem) {
+                    let checkedStates = targetedItem.data.checkedStates || {};
+                    checkedStates[checkIndex] = isChecked;
+                    targetedItem.data.checkedStates = checkedStates; 
+                    await updateDoc(itemRef, { checkedStates: checkedStates });
+                }
+            };
+
+            window.saveItem = async () => {
+                window.playUiSound('success');
+                const presetKey = document.getElementById('itemPresetKey').value;
+                const location = document.getElementById('itemLocation').value;
+                const priority = document.getElementById('itemPriority').value;
+                const notes = document.getElementById('itemNotes').value;
+                const selectedDate = document.getElementById('itemDate').value;
+                const photoData = document.getElementById('itemPhotoBase64').value;
+                const sketchData = document.getElementById('itemSketchBase64').value;
+
+                if(!location || !selectedDate) return window.showNotification("املأ مكان وتاريخ الاستلام يا هندسة!", "error");
+                const selectedPreset = window.presetItemsBank[presetKey];
+                
+                try {
+                    await addDoc(collection(db, "inspection_items"), {
+                        title: selectedPreset.title, category: selectedPreset.category, checks: selectedPreset.checks,
+                        sortOrder: selectedPreset.sortOrder, location, priority, notes, inspectionDate: selectedDate,
+                        photoUrl: photoData || "", sketchUrl: sketchData || "", checkedStates: {}, createdAt: new Date().toISOString()
+                    });
+                    
+                    window.closeModal();
+                    if(navigator.onLine){ window.showNotification("تم الحفظ والمزامنة السحابية بنجاح!", "success"); } 
+                    else { window.showNotification("تم الحفظ محلياً! سيتم الرفع تلقائياً عند لقط النت 📡", "success"); }
+                } catch (err) { console.error("خطأ التخزين: ", err); window.showNotification("فشل الحفظ، يرجى المحاولة مجدداً", "error"); }
+            };
+
+            function renderItems(snapshotDocs) {
+                const structCont = document.getElementById('structural-container'); const archCont = document.getElementById('architectural-container');
+                structCont.innerHTML = ''; archCont.innerHTML = '';
+                const sortedDocs = [...snapshotDocs].sort((a, b) => (a.data.sortOrder || 0) - (b.data.sortOrder || 0));
+
+                sortedDocs.forEach((docData) => {
+                    const item = docData.data; const id = docData.id;
+                    let checksHtml = ''; const checkedStates = item.checkedStates || {};
+                    if(item.checks) {
+                        item.checks.forEach((check, index) => {
+                            const isChecked = checkedStates[index] === true ? 'checked' : '';
+                            checksHtml += `<label class="flex items-start gap-2 text-slate-400 hover:text-white cursor-pointer"><input type="checkbox" ${isChecked} onchange="updateCheckStatus('${id}', ${index}, this.checked)" class="mt-0.5 rounded text-amber-500 bg-slate-850"><span>${check}</span></label>`;
+                        });
+                    }
+
+                    let photoHtml = '';
+                    if (item.photoUrl) photoHtml += `<img src="${item.photoUrl}" class="w-12 h-12 object-cover rounded border border-slate-700 mt-2">`;
+                    if (item.sketchUrl) photoHtml += `<img src="${item.sketchUrl}" class="w-12 h-12 object-contain bg-white rounded border border-emerald-500 mt-2">`;
+
+                    const cardHtml = `
+                        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 shadow-lg space-y-2">
+                            <div class="flex justify-between">
+                                <h3 class="font-bold text-white text-sm">${item.title} <span class="text-xs text-slate-400">📍 ${item.location}</span></h3>
+                                <button onclick="deleteItem('${id}')" class="text-slate-500 hover:text-red-400 text-xs">🗑️</button>
+                            </div>
+                            <div class="flex gap-2">${photoHtml}</div>
+                            <div class="border-t border-slate-800 pt-2 space-y-1 text-xs">${checksHtml}</div>
+                        </div>
+                    `;
+                    if(item.category === 'structural') structCont.innerHTML += cardHtml; else archCont.innerHTML += cardHtml;
+                });
+                document.getElementById('structural-count').innerText = `${structCont.children.length} بنود`;
+                document.getElementById('architectural-count').innerText = `${archCont.children.length} بنود`;
+            }
+
+            onSnapshot(query(collection(db, "inspection_items"), orderBy("createdAt", "desc")), (snapshot) => {
+                window.allItemsFetchedCached = [];
+                snapshot.forEach((doc) => window.allItemsFetchedCached.push({ id: doc.id, data: doc.data() }));
+                renderItems(window.allItemsFetchedCached);
+            }, (error) => { console.warn("أوفلاين - جاري القراءة من الكاش المحلي بنجاح."); });
+
+        } catch(e) { console.error("Firebase Init Error: ", e); }
+    </script>
+</body>
+</html>
